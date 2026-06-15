@@ -208,6 +208,37 @@ pi --hook ./safety.ts --tool ./todo.ts
 # After
 pi --extension ./safety.ts -e ./todo.ts
 ```
+- `HookAPI` → `ExtensionAPI`
+- `HookContext` → `ExtensionContext`
+- `HookCommandContext` → `ExtensionCommandContext`
+- `HookUIContext` → `ExtensionUIContext`
+- `CustomToolAPI` → `ExtensionAPI` (merged)
+- `CustomToolContext` → `ExtensionContext` (merged)
+- `CustomToolUIContext` → `ExtensionUIContext`
+- `CustomTool` → `ToolDefinition`
+- `CustomToolFactory` → `ExtensionFactory`
+- `HookMessage` → `CustomMessage`
+
+**Import changes:**
+```typescript
+// Before (hook)
+import type { HookAPI, HookContext } from "@mariozechner/pi-coding-agent";
+export default function (pi: HookAPI) { ... }
+
+// Before (custom tool)
+import type { CustomToolFactory } from "@mariozechner/pi-coding-agent";
+const factory: CustomToolFactory = (pi) => ({ name: "my_tool", ... });
+export default factory;
+
+// After (both are now extensions)
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+export default function (pi: ExtensionAPI) {
+  pi.on("tool_call", async (event, ctx) => { ... });
+  pi.registerTool({ name: "my_tool", ... });
+}
+```
+
+**Custom tools now have full context access.** Tools registered via `pi.registerTool()` now receive the same `ctx` object that event handlers receive. Previously, custom tools had limited context. Now all extension code shares the same capabilities:
 
 ## [15.13.1] - 2026-06-15
 
@@ -10180,37 +10211,6 @@ Hooks and custom tools are now unified as **extensions**. Both were TypeScript m
 No recursion beyond one level. Complex packages must use the `package.json` manifest. Dependencies are resolved via jiti, and extensions can be published to and installed from npm.
 
 **Type renames:**
-- `HookAPI` → `ExtensionAPI`
-- `HookContext` → `ExtensionContext`
-- `HookCommandContext` → `ExtensionCommandContext`
-- `HookUIContext` → `ExtensionUIContext`
-- `CustomToolAPI` → `ExtensionAPI` (merged)
-- `CustomToolContext` → `ExtensionContext` (merged)
-- `CustomToolUIContext` → `ExtensionUIContext`
-- `CustomTool` → `ToolDefinition`
-- `CustomToolFactory` → `ExtensionFactory`
-- `HookMessage` → `CustomMessage`
-
-**Import changes:**
-```typescript
-// Before (hook)
-import type { HookAPI, HookContext } from "@mariozechner/pi-coding-agent";
-export default function (pi: HookAPI) { ... }
-
-// Before (custom tool)
-import type { CustomToolFactory } from "@mariozechner/pi-coding-agent";
-const factory: CustomToolFactory = (pi) => ({ name: "my_tool", ... });
-export default factory;
-
-// After (both are now extensions)
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-export default function (pi: ExtensionAPI) {
-  pi.on("tool_call", async (event, ctx) => { ... });
-  pi.registerTool({ name: "my_tool", ... });
-}
-```
-
-**Custom tools now have full context access.** Tools registered via `pi.registerTool()` now receive the same `ctx` object that event handlers receive. Previously, custom tools had limited context. Now all extension code shares the same capabilities:
 
 ### Prompt Templates Migration
 
