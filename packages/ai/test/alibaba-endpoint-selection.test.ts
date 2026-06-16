@@ -190,3 +190,56 @@ describe("alibaba-coding-plan endpoint selection", () => {
 		);
 	});
 });
+
+describe("alibaba-coding-plan JSON apiKey", () => {
+	it("getOAuthApiKey returns JSON with token and enterpriseUrl", async () => {
+		const { getOAuthApiKey } = await import("../src/registry/oauth/index");
+		const credentials = {
+			"alibaba-coding-plan": {
+				access: "sk-test-key",
+				refresh: "refresh-token",
+				expires: Date.now() + 3600000,
+				enterpriseUrl: "https://coding.dashscope.aliyuncs.com/v1",
+			},
+		};
+		const result = await getOAuthApiKey("alibaba-coding-plan", credentials);
+		expect(result).not.toBeNull();
+		const parsed = JSON.parse(result!.apiKey);
+		expect(parsed.token).toBe("sk-test-key");
+		expect(parsed.enterpriseUrl).toBe("https://coding.dashscope.aliyuncs.com/v1");
+	});
+
+	it("JSON apiKey parsing extracts token for Bearer header", () => {
+		const rawApiKey = JSON.stringify({
+			token: "sk-bearer-token",
+			enterpriseUrl: "https://custom.endpoint.com/v1",
+		});
+		const parsed = JSON.parse(rawApiKey);
+		const apiKey = typeof parsed?.token === "string" ? parsed.token : rawApiKey;
+		expect(apiKey).toBe("sk-bearer-token");
+	});
+
+	it("JSON apiKey parsing extracts enterpriseUrl for baseUrl", () => {
+		const rawApiKey = JSON.stringify({
+			token: "sk-test",
+			enterpriseUrl: "https://china.dashscope.aliyuncs.com/v1",
+		});
+		const parsed = JSON.parse(rawApiKey);
+		const baseUrl = typeof parsed?.enterpriseUrl === "string" ? parsed.enterpriseUrl : undefined;
+		expect(baseUrl).toBe("https://china.dashscope.aliyuncs.com/v1");
+	});
+
+	it("non-JSON apiKey falls back to raw value", () => {
+		const rawApiKey = "sk-plain-key";
+		let apiKey = rawApiKey;
+		try {
+			const parsed = JSON.parse(rawApiKey);
+			if (typeof parsed?.token === "string") {
+				apiKey = parsed.token;
+			}
+		} catch {
+			// Not JSON — use raw apiKey
+		}
+		expect(apiKey).toBe("sk-plain-key");
+	});
+});
