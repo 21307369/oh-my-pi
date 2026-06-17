@@ -348,8 +348,11 @@ const translations: Record<Locale, Record<string, string>> = {
 		"nav.menu.close": "关闭导航菜单",
 		"nav.menu.title": "导航菜单",
 		"nav.observability": "可观测性",
+		"nav.menu": "导航菜单",
+		"nav.closeMenu": "关闭导航菜单",
 
 		// Top bar
+		"topBar.observability": "可观测性",
 		"topBar.notUpdated": "未更新",
 		"topBar.updated": "已更新 {time}",
 		"topBar.languageToggle": "切换语言",
@@ -365,6 +368,8 @@ const translations: Record<Locale, Record<string, string>> = {
 
 		// Range control
 		"rangeControl.label": "选择时间范围",
+		"rangeControl.all": "全部",
+		"rangeControl.selectRange": "选择时间范围",
 
 		// Sync button
 		"sync.syncing": "同步中...",
