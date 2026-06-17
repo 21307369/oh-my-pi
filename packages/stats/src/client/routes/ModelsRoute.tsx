@@ -150,10 +150,15 @@ function ModelShareChart({ modelSeries, timeRange }: { modelSeries: ModelTimeSer
 	}, [chartTheme]);
 
 	return (
-		<Panel title={t("models.shareChart-title")} subtitle={t("models.shareChart-subtitle", { window: meta.windowLabel })}>
+		<Panel
+			title={t("models.shareChart-title")}
+			subtitle={t("models.shareChart-subtitle", { window: meta.windowLabel })}
+		>
 			<div className="h-[280px]">
 				{chartData.data.length === 0 ? (
-					<div className="h-full flex items-center justify-center text-stats-muted text-sm">{t("models.shareChart-noData")}</div>
+					<div className="h-full flex items-center justify-center text-stats-muted text-sm">
+						{t("models.shareChart-noData")}
+					</div>
 				) : (
 					<Line data={data} options={options} />
 				)}
@@ -324,44 +329,48 @@ function ModelsTable({
 							expandedContent={
 								<div className="grid gap-4" style={{ gridTemplateColumns: "200px 1fr" }}>
 									<div className="space-y-4 text-sm">
-									<div>
-										<div className="text-[var(--text-primary)] font-medium mb-2">{t("models.expanded-quality")}</div>
-										<div className="space-y-1 text-[var(--text-secondary)]">
-											<div className="flex items-center justify-between">
-												<span>{t("models.expanded-errorRate")}</span>
-												<span
-													className={
-														errorRate > 5 ? "text-[var(--accent-red)]" : "text-[var(--accent-green)]"
-													}
-												>
-													{errorRate.toFixed(1)}%
-												</span>
+										<div>
+											<div className="text-[var(--text-primary)] font-medium mb-2">
+												{t("models.expanded-quality")}
 											</div>
-											<div className="flex items-center justify-between">
-												<span>{t("models.expanded-cacheRate")}</span>
-												<span className="text-[var(--accent-cyan)]">
-													{(model.cacheRate * 100).toFixed(1)}%
-												</span>
-											</div>
-										</div>
-									</div>
-									<div>
-										<div className="text-[var(--text-primary)] font-medium mb-2">{t("models.expanded-latency")}</div>
-										<div className="space-y-1 text-[var(--text-secondary)]">
-											<div className="flex items-center justify-between">
-												<span>{t("models.expanded-avgDuration")}</span>
-												<span className="font-mono">
-													{model.avgDuration ? `${(model.avgDuration / 1000).toFixed(2)}s` : "-"}
-												</span>
-											</div>
-											<div className="flex items-center justify-between">
-												<span>{t("models.expanded-avgTTFT")}</span>
-												<span className="font-mono">
-													{model.avgTtft ? `${(model.avgTtft / 1000).toFixed(2)}s` : "-"}
-												</span>
+											<div className="space-y-1 text-[var(--text-secondary)]">
+												<div className="flex items-center justify-between">
+													<span>{t("models.expanded-errorRate")}</span>
+													<span
+														className={
+															errorRate > 5 ? "text-[var(--accent-red)]" : "text-[var(--accent-green)]"
+														}
+													>
+														{errorRate.toFixed(1)}%
+													</span>
+												</div>
+												<div className="flex items-center justify-between">
+													<span>{t("models.expanded-cacheRate")}</span>
+													<span className="text-[var(--accent-cyan)]">
+														{(model.cacheRate * 100).toFixed(1)}%
+													</span>
+												</div>
 											</div>
 										</div>
-									</div>
+										<div>
+											<div className="text-[var(--text-primary)] font-medium mb-2">
+												{t("models.expanded-latency")}
+											</div>
+											<div className="space-y-1 text-[var(--text-secondary)]">
+												<div className="flex items-center justify-between">
+													<span>{t("models.expanded-avgDuration")}</span>
+													<span className="font-mono">
+														{model.avgDuration ? `${(model.avgDuration / 1000).toFixed(2)}s` : "-"}
+													</span>
+												</div>
+												<div className="flex items-center justify-between">
+													<span>{t("models.expanded-avgTTFT")}</span>
+													<span className="font-mono">
+														{model.avgTtft ? `${(model.avgTtft / 1000).toFixed(2)}s` : "-"}
+													</span>
+												</div>
+											</div>
+										</div>
 									</div>
 									<div className="h-[200px]">
 										{trendData.length === 0 ? (

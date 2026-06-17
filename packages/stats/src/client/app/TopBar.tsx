@@ -69,7 +69,7 @@ export function TopBar({
 
 				<select
 					value={getLocale()}
-					onChange={(e) => setLocale(e.target.value as "en" | "zh")}
+					onChange={e => setLocale(e.target.value as "en" | "zh")}
 					className="stats-language-select"
 					aria-label={t("topBar.languageToggle")}
 					title={t("topBar.languageToggle")}

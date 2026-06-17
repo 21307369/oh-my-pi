@@ -1,6 +1,12 @@
 import { useMemo } from "react";
 import { getRecentRequests } from "../api";
-import { formatCost, formatDurationMs, formatInteger, formatRelativeTime, formatTokensPerSecond } from "../data/formatters";
+import {
+	formatCost,
+	formatDurationMs,
+	formatInteger,
+	formatRelativeTime,
+	formatTokensPerSecond,
+} from "../data/formatters";
 import { useResource } from "../data/useResource";
 import { useTranslation } from "../i18n";
 import type { MessageStats, TimeRange } from "../types";

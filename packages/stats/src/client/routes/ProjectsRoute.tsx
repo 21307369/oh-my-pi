@@ -146,12 +146,7 @@ export function ProjectsRoute({ active, range, refreshTrigger }: ProjectsRoutePr
 	return (
 		<div className="stats-route-container">
 			<Panel title={t("projects.title")} subtitle={t("projects.subtitle")}>
-				<AsyncBoundary
-					loading={loading}
-					error={error}
-					data={foldersData}
-					emptyText={t("projects.noFolders")}
-				>
+				<AsyncBoundary loading={loading} error={error} data={foldersData} emptyText={t("projects.noFolders")}>
 					<DataTable
 						columns={columns}
 						data={folderRows}

@@ -1,5 +1,5 @@
 import { useTranslation } from "../i18n";
-import { getRoutes, type DashboardSection } from "./routes";
+import { type DashboardSection, getRoutes } from "./routes";
 
 export interface NavRailProps {
 	activeSection: DashboardSection;

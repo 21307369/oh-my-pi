@@ -112,7 +112,9 @@ function BehaviorSummaryPanel({
 		{
 			label: t("behavior.highestFrictionModel"),
 			value: summary.highestFrictionModel?.model ?? "—",
-			sub: summary.highestFrictionModel ? `${formatInteger(summary.highestFrictionModel.score)} ${t("behavior.hits")}` : undefined,
+			sub: summary.highestFrictionModel
+				? `${formatInteger(summary.highestFrictionModel.score)} ${t("behavior.hits")}`
+				: undefined,
 		},
 	];
 
@@ -416,49 +418,49 @@ function BehaviorModelsTable({
 							expandedContent={
 								<div className="grid gap-4" style={{ gridTemplateColumns: "220px 1fr" }}>
 									<div className="space-y-4 text-sm">
-									<DetailRow
-										label={t("behavior.detail-yelling")}
-										total={model.totalYelling}
-										messages={model.totalMessages}
-										valueClass="text-[#ed4abf]"
-									/>
-									<DetailRow
-										label={t("behavior.detail-profanity")}
-										total={model.totalProfanity}
-										messages={model.totalMessages}
-										valueClass="text-[#ff6b7d]"
-									/>
-									<DetailRow
-										label={t("behavior.detail-anguish")}
-										total={model.totalAnguish}
-										messages={model.totalMessages}
-										valueClass="text-[#9b4dff]"
-									/>
-									<DetailRow
-										label={t("behavior.detail-negation")}
-										total={model.totalNegation}
-										messages={model.totalMessages}
-										valueClass="text-[#5ad8e6]"
-									/>
-									<DetailRow
-										label={t("behavior.detail-repetition")}
-										total={model.totalRepetition}
-										messages={model.totalMessages}
-										valueClass="text-[#5ad8e6]"
-									/>
-									<DetailRow
-										label={t("behavior.detail-blame")}
-										total={model.totalBlame}
-										messages={model.totalMessages}
-										valueClass="text-[#5ad8e6]"
-									/>
-									<DetailRow
-										label={t("behavior.detail-avgChars")}
-										total={model.totalChars}
-										messages={model.totalMessages}
-										valueClass="stats-text-secondary"
-										mode="average"
-									/>
+										<DetailRow
+											label={t("behavior.detail-yelling")}
+											total={model.totalYelling}
+											messages={model.totalMessages}
+											valueClass="text-[#ed4abf]"
+										/>
+										<DetailRow
+											label={t("behavior.detail-profanity")}
+											total={model.totalProfanity}
+											messages={model.totalMessages}
+											valueClass="text-[#ff6b7d]"
+										/>
+										<DetailRow
+											label={t("behavior.detail-anguish")}
+											total={model.totalAnguish}
+											messages={model.totalMessages}
+											valueClass="text-[#9b4dff]"
+										/>
+										<DetailRow
+											label={t("behavior.detail-negation")}
+											total={model.totalNegation}
+											messages={model.totalMessages}
+											valueClass="text-[#5ad8e6]"
+										/>
+										<DetailRow
+											label={t("behavior.detail-repetition")}
+											total={model.totalRepetition}
+											messages={model.totalMessages}
+											valueClass="text-[#5ad8e6]"
+										/>
+										<DetailRow
+											label={t("behavior.detail-blame")}
+											total={model.totalBlame}
+											messages={model.totalMessages}
+											valueClass="text-[#5ad8e6]"
+										/>
+										<DetailRow
+											label={t("behavior.detail-avgChars")}
+											total={model.totalChars}
+											messages={model.totalMessages}
+											valueClass="stats-text-secondary"
+											mode="average"
+										/>
 									</div>
 									<div className="h-[200px]">
 										{trend.length === 0 ? (

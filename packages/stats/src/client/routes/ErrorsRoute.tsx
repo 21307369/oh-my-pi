@@ -100,12 +100,7 @@ export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRo
 	return (
 		<div className="stats-route-container">
 			<Panel title={t("errors.title")} subtitle={t("errors.subtitle")}>
-				<AsyncBoundary
-					loading={loading}
-					error={error}
-					data={recentErrors}
-					emptyText={t("errors.noFailures")}
-				>
+				<AsyncBoundary loading={loading} error={error} data={recentErrors} emptyText={t("errors.noFailures")}>
 					<DataTable
 						columns={columns}
 						data={recentErrors || []}

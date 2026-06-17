@@ -125,7 +125,6 @@ const translations: Record<Locale, Record<string, string>> = {
 		"requests.column.model": "Model",
 		"requests.column.status": "Status",
 		"requests.column.tokens": "Tokens",
-		"requests.column.tokens": "Tokens",
 		"requests.column.inputOutput": "Input/Output",
 		"requests.column.cache": "Cache R/W",
 		"requests.column.tokensPerSec": "Tokens/s",

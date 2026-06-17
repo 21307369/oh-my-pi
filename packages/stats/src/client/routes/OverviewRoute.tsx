@@ -236,7 +236,7 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 									<Line data={chartData} options={chartOptions} />
 								) : (
 									<div className="h-full flex items-center justify-center text-stats-muted text-sm">
-									{t("overview.noTimeSeries")}
+										{t("overview.noTimeSeries")}
 									</div>
 								)}
 							</div>
@@ -302,7 +302,9 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 									);
 								})}
 								{previewRequests.length === 0 && (
-									<div className="py-8 text-center stats-text-muted text-sm">{t("overview.noRecentRequests")}</div>
+									<div className="py-8 text-center stats-text-muted text-sm">
+										{t("overview.noRecentRequests")}
+									</div>
 								)}
 							</div>
 						</AsyncBoundary>

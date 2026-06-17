@@ -73,7 +73,11 @@ function CostOverviewPanel({ costSeries }: { costSeries: CostTimeSeriesPoint[] }
 					<p className="text-2xl font-bold stats-text-primary truncate" title={card.value}>
 						{card.value}
 					</p>
-					{card.sub && <p className="text-xs stats-text-muted mt-1 font-medium">{t("costs.totalSpent")}: {card.sub}</p>}
+					{card.sub && (
+						<p className="text-xs stats-text-muted mt-1 font-medium">
+							{t("costs.totalSpent")}: {card.sub}
+						</p>
+					)}
 				</Panel>
 			))}
 		</div>
@@ -145,6 +149,7 @@ function CostTrendPanel({ costSeries }: { costSeries: CostTimeSeriesPoint[] }) {
 	const sharedPlugins = useMemo(() => {
 		return buildSharedPlugins({
 			chartTheme,
+			showLegend: false,
 			defaultLabel: t("costs.label"),
 			formatValue: v => `$${v.toFixed(2)}`,
 			footer: items => {

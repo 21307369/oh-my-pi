@@ -36,7 +36,7 @@ export function DataTable<T>({
 	};
 
 	if (data.length === 0) {
-		return <div className="stats-table-empty">{emptyText}</div>;
+		return <div className="stats-table-empty">{defaultEmptyText}</div>;
 	}
 
 	return (

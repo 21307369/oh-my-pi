@@ -84,7 +84,11 @@ export function RequestDrawer({ id, onClose }: RequestDrawerProps) {
 				<div className="stats-drawer-header">
 					<div className="stats-drawer-header-left">
 						<h2 className="stats-drawer-title">{t("detail.title")}</h2>
-						{details && <span className="stats-drawer-id">{t("detail.id")}: {id}</span>}
+						{details && (
+							<span className="stats-drawer-id">
+								{t("detail.id")}: {id}
+							</span>
+						)}
 					</div>
 					<button
 						ref={closeButtonRef}
@@ -162,7 +166,10 @@ export function RequestDrawer({ id, onClose }: RequestDrawerProps) {
 									</div>
 									<div className="stats-drawer-metric-value">{formatInteger(details.usage.totalTokens)}</div>
 									<div className="stats-drawer-metric-sub">
-										{t("detail.inOut", { input: formatInteger(details.usage.input), output: formatInteger(details.usage.output) })}
+										{t("detail.inOut", {
+											input: formatInteger(details.usage.input),
+											output: formatInteger(details.usage.output),
+										})}
 									</div>
 								</div>
 
