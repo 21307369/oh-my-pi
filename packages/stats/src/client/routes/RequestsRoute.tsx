@@ -122,7 +122,7 @@ export function RequestsRoute({ active, refreshTrigger, onRequestClick }: Reques
 			<div className="stats-mobile-card-grid">
 				<div>
 					<div className="stats-mobile-card-label">{t("requests.column.time")}</div>
-					<div className="stats-mobile-card-value">{formatRelativeTime(item.timestamp)}</div>
+					<div className="stats-mobile-card-value">{formatRelativeTime(item.timestamp, locale)}</div>
 				</div>
 				<div>
 					<div className="stats-mobile-card-label">{t("requests.column.cost")}</div>

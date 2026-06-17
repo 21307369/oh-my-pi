@@ -82,7 +82,7 @@ export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRo
 			<div className="stats-mobile-card-grid">
 				<div>
 					<div className="stats-mobile-card-label">{t("errors.column.time")}</div>
-					<div className="stats-mobile-card-value">{formatRelativeTime(item.timestamp)}</div>
+					<div className="stats-mobile-card-value">{formatRelativeTime(item.timestamp, locale)}</div>
 				</div>
 				<div>
 					<div className="stats-mobile-card-label">{t("errors.column.cost")}</div>

@@ -197,7 +197,7 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 			<div className="stats-mobile-card-grid">
 				<div>
 					<div className="stats-mobile-card-label">{t("requests.column.time")}</div>
-					<div className="stats-mobile-card-value">{formatRelativeTime(item.timestamp)}</div>
+					<div className="stats-mobile-card-value">{formatRelativeTime(item.timestamp, locale)}</div>
 				</div>
 				<div>
 					<div className="stats-mobile-card-label">{t("requests.column.cost")}</div>
@@ -284,7 +284,7 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 														{req.model}
 													</div>
 													<div className="stats-text-xs stats-text-muted whitespace-nowrap">
-														{formatRelativeTime(req.timestamp)}
+														{formatRelativeTime(req.timestamp, locale)}
 													</div>
 												</div>
 												<div className="flex justify-between items-center text-xs stats-text-muted mt-0.5">
