@@ -144,7 +144,7 @@ function CostTrendPanel({ costSeries }: { costSeries: CostTimeSeriesPoint[] }) {
 			},
 			bucketToValue: bucket => bucket.total,
 		});
-	}, [costSeries, byModel]);
+	}, [costSeries, byModel, t]);
 
 	const sharedPlugins = useMemo(() => {
 		return buildSharedPlugins({
@@ -158,7 +158,7 @@ function CostTrendPanel({ costSeries }: { costSeries: CostTimeSeriesPoint[] }) {
 				return `${t("costs.total")}: $${total.toFixed(2)}`;
 			},
 		});
-	}, [chartTheme, byModel]);
+	}, [chartTheme, byModel, t]);
 
 	const { sharedScaleBase, yScale } = useMemo(() => {
 		return buildSharedScales({

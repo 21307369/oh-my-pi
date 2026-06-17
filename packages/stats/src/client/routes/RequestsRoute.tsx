@@ -19,7 +19,7 @@ export interface RequestsRouteProps {
 }
 
 export function RequestsRoute({ active, refreshTrigger, onRequestClick }: RequestsRouteProps) {
-	const { t } = useTranslation();
+	const { t, locale } = useTranslation();
 
 	const {
 		data: recentRequests,
@@ -44,7 +44,7 @@ export function RequestsRoute({ active, refreshTrigger, onRequestClick }: Reques
 			{
 				key: "timestamp",
 				header: t("requests.column.time"),
-				render: (item: MessageStats) => formatRelativeTime(item.timestamp),
+				render: (item: MessageStats) => formatRelativeTime(item.timestamp, locale),
 			},
 			{
 				key: "tokens",
@@ -105,7 +105,7 @@ export function RequestsRoute({ active, refreshTrigger, onRequestClick }: Reques
 				),
 			},
 		],
-		[t],
+		[t, locale],
 	);
 
 	const renderMobileCard = (item: MessageStats, onClick?: () => void) => (

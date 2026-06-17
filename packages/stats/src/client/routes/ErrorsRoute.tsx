@@ -14,7 +14,7 @@ export interface ErrorsRouteProps {
 }
 
 export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRouteProps) {
-	const { t } = useTranslation();
+	const { t, locale } = useTranslation();
 
 	const {
 		data: recentErrors,
@@ -40,7 +40,7 @@ export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRo
 			{
 				key: "timestamp",
 				header: t("errors.column.time"),
-				render: (item: MessageStats) => formatRelativeTime(item.timestamp),
+				render: (item: MessageStats) => formatRelativeTime(item.timestamp, locale),
 			},
 			{
 				key: "errorMessage",
@@ -67,7 +67,7 @@ export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRo
 				render: (item: MessageStats) => formatCost(item.usage.cost.total, 4),
 			},
 		],
-		[t],
+		[t, locale],
 	);
 
 	const renderMobileCard = (item: MessageStats, onClick?: () => void) => (

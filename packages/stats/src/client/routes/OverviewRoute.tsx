@@ -18,7 +18,7 @@ export interface OverviewRouteProps {
 }
 
 export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }: OverviewRouteProps) {
-	const { t } = useTranslation();
+	const { t, locale } = useTranslation();
 
 	const {
 		data: overview,
@@ -149,7 +149,7 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 			{
 				key: "timestamp",
 				header: t("requests.column.time"),
-				render: (item: MessageStats) => formatRelativeTime(item.timestamp),
+				render: (item: MessageStats) => formatRelativeTime(item.timestamp, locale),
 			},
 			{
 				key: "tokens",
@@ -180,7 +180,7 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 				),
 			},
 		],
-		[t],
+		[t, locale],
 	);
 
 	const renderMobileCard = (item: MessageStats, onClick?: () => void) => (

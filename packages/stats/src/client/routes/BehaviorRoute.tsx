@@ -209,7 +209,7 @@ function BehaviorChartPanel({ behaviorSeries }: { behaviorSeries: BehaviorTimeSe
 			},
 			bucketToValue: bucket => ratePercent(bucket.hits, bucket.messages),
 		});
-	}, [behaviorSeries, byModel, metric]);
+	}, [behaviorSeries, byModel, metric, t]);
 
 	const sharedPlugins = useMemo(() => {
 		return buildSharedPlugins({
