@@ -13,7 +13,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		// Navigation
 		"nav.title": "OH MY PI",
 		"nav.subtitle": "Observability",
-		"nav.version": "OMP Stats v1.0.0",
+		"nav.version": "OMP Stats v{version}",
 		"nav.section.overview": "Overview",
 		"nav.section.requests": "Requests",
 		"nav.section.errors": "Errors",
@@ -43,6 +43,14 @@ const translations: Record<Locale, Record<string, string>> = {
 		"range.last30d": "the last 30 days",
 		"range.last90d": "the last 90 days",
 
+		// Trend labels (for table columns)
+		"trend.1h": "1h Trend",
+		"trend.24h": "24h Trend",
+		"trend.7d": "7d Trend",
+		"trend.30d": "30d Trend",
+		"trend.90d": "90d Trend",
+		"trend.all": "Trend",
+
 		// Range control
 		"rangeControl.all": "All",
 		"rangeControl.selectRange": "Select time range",
@@ -51,7 +59,6 @@ const translations: Record<Locale, Record<string, string>> = {
 		// Sync button
 		"sync.syncing": "Syncing...",
 		"sync.syncDb": "Sync DB",
-		"sync.db": "Sync DB",
 		"sync.synced": "Synced {count} requests",
 		"sync.success": "Synced: {count} new request{plural} found.",
 		"sync.failed": "Sync failed: {error}",
@@ -101,17 +108,11 @@ const translations: Record<Locale, Record<string, string>> = {
 		"overview.throughput": "System Throughput",
 		"overview.throughput.title": "System Throughput",
 		"overview.throughput.subtitle": "Request volume and errors over time",
-		"overview.throughputSub": "Request volume and errors over time",
-		"overview.feed": "Operational Feed",
 		"overview.feed.title": "Operational Feed",
 		"overview.feed.subtitle": "Real-time request log",
-		"overview.feedSub": "Real-time request log",
-		"overview.preview": "Recent Requests Preview",
 		"overview.preview.title": "Recent Requests Preview",
 		"overview.preview.subtitle": "Latest transactions processed by the proxy",
-		"overview.previewSub": "Latest transactions processed by the proxy",
 		"overview.viewAll": "View All Requests",
-		"overview.noRequests": "No recent requests found",
 		"overview.noRecentRequests": "No recent requests found",
 		"overview.noTimeSeries": "No time-series data available",
 		"overview.chart.requests": "Requests",
@@ -148,8 +149,6 @@ const translations: Record<Locale, Record<string, string>> = {
 
 		// Models route
 		"models.preference": "Model Preference",
-		"models.preferenceSub": "Share of requests over {window}",
-		"models.share.title": "Model Share",
 		"models.noData": "No data available",
 		"models.statistics": "Model Statistics",
 		"models.requests": "Requests",
@@ -201,7 +200,6 @@ const translations: Record<Locale, Record<string, string>> = {
 		"behavior.userMessages": "User Messages",
 		"behavior.inRange": "in range",
 		"behavior.asPercentOfMessages": "as % of messages",
-		"behavior.yelling": "Yelling (CAPS)",
 		"behavior.yellingCaps": "Yelling (CAPS)",
 		"behavior.profanityHits": "Profanity Hits",
 		"behavior.anguishSignals": "Anguish Signals",
@@ -233,16 +231,15 @@ const translations: Record<Locale, Record<string, string>> = {
 		"behavior.allCombined": "All signals combined",
 		"behavior.model": "Model",
 		"behavior.messagesCol": "Messages",
-		"behavior.capsPercent": "CAPS %",
-		"behavior.profanityPercent": "Profanity %",
+		"behavior.percentOfMsgs": "% of msgs",
+		"behavior.perMsg": "Per msg",
+		"behavior.perMsgSuffix": "/ msg",
 		"behavior.anguishPercent": "Anguish %",
 		"behavior.frustrationPercent": "Frustration %",
 		"behavior.hitsPercent": "Hits %",
 		"behavior.trend": "Trend",
 		"behavior.avgCharsPerMsg": "Avg chars / msg",
 		"behavior.total": "Total",
-		"behavior.percentOfMsgs": "% of msgs",
-		"behavior.perMsg": "Per msg",
 		"behavior.detailTotal": "Total",
 		"behavior.detailPerMsg": "Per msg",
 		"behavior.detailRate": "Rate",
@@ -336,7 +333,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		// Navigation
 		"nav.title": "OH MY PI",
 		"nav.subtitle": "可观测性",
-		"nav.version": "OMP Stats v1.0.0",
+		"nav.version": "OMP Stats v{version}",
 		"nav.section.overview": "概览",
 		"nav.section.requests": "请求",
 		"nav.section.errors": "错误",
@@ -351,13 +348,6 @@ const translations: Record<Locale, Record<string, string>> = {
 		"nav.menu": "导航菜单",
 		"nav.closeMenu": "关闭导航菜单",
 
-		// Top bar
-		"topBar.observability": "可观测性",
-		"topBar.notUpdated": "未更新",
-		"topBar.updated": "已更新 {time}",
-		"topBar.languageToggle": "切换语言",
-		"topBar.openMenu": "打开菜单",
-
 		// Time ranges
 		"range.all": "全部",
 		"range.lastHour": "过去一小时",
@@ -365,6 +355,14 @@ const translations: Record<Locale, Record<string, string>> = {
 		"range.last7d": "过去7天",
 		"range.last30d": "过去30天",
 		"range.last90d": "过去90天",
+
+		// Trend labels (for table columns)
+		"trend.1h": "1小时趋势",
+		"trend.24h": "24小时趋势",
+		"trend.7d": "7天趋势",
+		"trend.30d": "30天趋势",
+		"trend.90d": "90天趋势",
+		"trend.all": "趋势",
 
 		// Range control
 		"rangeControl.label": "选择时间范围",
@@ -374,8 +372,6 @@ const translations: Record<Locale, Record<string, string>> = {
 		// Sync button
 		"sync.syncing": "同步中...",
 		"sync.syncDb": "同步数据库",
-		"sync.db": "同步数据库",
-		"sync.synced": "已同步 {count} 个请求",
 		"sync.success": "同步完成: 发现 {count} 个新请求。",
 		"sync.failed": "同步失败: {error}",
 
@@ -421,17 +417,11 @@ const translations: Record<Locale, Record<string, string>> = {
 		"overview.throughput": "系统吞吐量",
 		"overview.throughput.title": "系统吞吐量",
 		"overview.throughput.subtitle": "请求量和错误随时间变化",
-		"overview.throughputSub": "请求量和错误随时间变化",
-		"overview.feed": "实时动态",
 		"overview.feed.title": "实时动态",
 		"overview.feed.subtitle": "实时请求日志",
-		"overview.feedSub": "实时请求日志",
-		"overview.preview": "最近请求预览",
 		"overview.preview.title": "最近请求预览",
 		"overview.preview.subtitle": "代理处理的最新事务",
-		"overview.previewSub": "代理处理的最新事务",
 		"overview.viewAll": "查看所有请求",
-		"overview.noRequests": "未找到最近请求",
 		"overview.noRecentRequests": "未找到最近请求",
 		"overview.noTimeSeries": "无时序数据",
 		"overview.chart.requests": "请求",
@@ -468,7 +458,6 @@ const translations: Record<Locale, Record<string, string>> = {
 
 		// Models route
 		"models.preference": "模型偏好",
-		"models.preferenceSub": "{window}内的请求份额",
 		"models.noData": "暂无数据",
 		"models.statistics": "模型统计",
 		"models.requests": "请求数",
@@ -569,6 +558,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"behavior.total": "总计",
 		"behavior.percentOfMsgs": "消息占比",
 		"behavior.perMsg": "每条消息",
+		"behavior.perMsgSuffix": "/ 消息",
 		"behavior.detailTotal": "总计",
 		"behavior.detailPerMsg": "每条消息",
 		"behavior.detailRate": "比率",
@@ -676,6 +666,10 @@ function detectInitialLocale(): Locale {
 }
 
 currentLocale = detectInitialLocale();
+// 初始化时同步 document lang，避免首次加载中文时 <html lang="en"> 未更新
+if (typeof document !== "undefined") {
+	document.documentElement.lang = currentLocale === "zh" ? "zh-CN" : "en";
+}
 
 function notifyListeners() {
 	for (const listener of listeners) {

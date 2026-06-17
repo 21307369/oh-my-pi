@@ -31,7 +31,7 @@ import {
 import { formatInteger } from "../data/formatters";
 import { useResource } from "../data/useResource";
 import { buildBehaviorSummary } from "../data/view-models";
-import { useTranslation } from "../i18n";
+import { type TranslationFn, useTranslation } from "../i18n";
 import type { BehaviorModelStats, BehaviorOverallStats, BehaviorTimeSeriesPoint, TimeRange } from "../types";
 import { AsyncBoundary, Panel, SegmentedControl } from "../ui";
 import { useSystemTheme } from "../useSystemTheme";
@@ -67,9 +67,9 @@ export function BehaviorRoute({ active, range, refreshTrigger }: BehaviorRoutePr
 	);
 }
 
-function perMsg(total: number, messages: number): string | undefined {
+function perMsg(total: number, messages: number, t: TranslationFn): string | undefined {
 	if (messages <= 0) return undefined;
-	return `${(total / messages).toFixed(2)} / msg`;
+	return `${(total / messages).toFixed(2)} ${t("behavior.perMsgSuffix")}`;
 }
 
 function BehaviorSummaryPanel({
@@ -92,22 +92,22 @@ function BehaviorSummaryPanel({
 		{
 			label: t("behavior.yellingCaps"),
 			value: formatInteger(overall.totalYelling),
-			sub: perMsg(overall.totalYelling, messages),
+			sub: perMsg(overall.totalYelling, messages, t),
 		},
 		{
 			label: t("behavior.profanityHits"),
 			value: formatInteger(overall.totalProfanity),
-			sub: perMsg(overall.totalProfanity, messages),
+			sub: perMsg(overall.totalProfanity, messages, t),
 		},
 		{
 			label: t("behavior.anguishSignals"),
 			value: formatInteger(overall.totalAnguish),
-			sub: perMsg(overall.totalAnguish, messages),
+			sub: perMsg(overall.totalAnguish, messages, t),
 		},
 		{
 			label: t("behavior.frictionSignals"),
 			value: formatInteger(summary.totalFrustration),
-			sub: perMsg(summary.totalFrustration, messages),
+			sub: perMsg(summary.totalFrustration, messages, t),
 		},
 		{
 			label: t("behavior.highestFrictionModel"),

@@ -89,6 +89,7 @@ export function rangeMeta(range: TimeRange, t: TranslationFn): RangeMeta {
 	return {
 		...base,
 		windowLabel: t(WINDOW_LABEL_KEY[range]),
+		trendLabel: t(`trend.${range}`),
 	};
 }
 
