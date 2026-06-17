@@ -27,6 +27,7 @@ export function ThemeToggle() {
 		<button
 			type="button"
 			className="stats-theme-toggle"
+			onClick={() => setPreference(nextPreference)}
 			aria-label={t("theme.switchHint", { theme: nextLabel })}
 			title={t("theme.switchHint", { theme: nextLabel })}
 		>
