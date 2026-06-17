@@ -78,7 +78,7 @@ export function RequestsRoute({ active, refreshTrigger, onRequestClick }: Reques
 				numeric: true,
 				render: (item: MessageStats) => {
 					if (!item.duration || item.duration === 0) return "-";
-					const tps = item.usage.totalTokens / (item.duration / 1000);
+					const tps = (item.usage.output * 1000) / item.duration;
 					return formatTokensPerSecond(tps);
 				},
 			},

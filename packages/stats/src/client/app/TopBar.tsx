@@ -36,7 +36,8 @@ export function TopBar({
 	const formatLastUpdated = (time: number | null) => {
 		if (!time) return t("topBar.notUpdated");
 		const date = new Date(time);
-		return `${t("topBar.updated")} ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+		const timeStr = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+		return t("topBar.updated", { time: timeStr });
 	};
 
 	return (

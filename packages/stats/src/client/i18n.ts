@@ -60,6 +60,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"theme.system": "System theme",
 		"theme.light": "Light theme",
 		"theme.dark": "Dark theme",
+		"theme.switchHint": "Switch to {theme}",
 
 		// Metrics
 		"metric.totalCost": "Total Cost",
@@ -102,6 +103,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"overview.throughput.subtitle": "Request volume and errors over time",
 		"overview.throughputSub": "Request volume and errors over time",
 		"overview.feed": "Operational Feed",
+		"overview.feed.title": "Operational Feed",
 		"overview.feed.subtitle": "Real-time request log",
 		"overview.feedSub": "Real-time request log",
 		"overview.preview": "Recent Requests Preview",
@@ -129,6 +131,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"requests.column.cache": "Cache R/W",
 		"requests.column.tokensPerSec": "Tokens/s",
 		"requests.column.duration": "Duration",
+		"requests.column.cost": "Cost",
 
 		// Errors route
 		"errors.title": "Recent Errors",
