@@ -1,4 +1,4 @@
-import { rangeMeta } from "../components/range-meta";
+import { rangeBucketMeta } from "../components/range-meta";
 import type {
 	BehaviorOverallStats,
 	BehaviorTimeSeriesPoint,
@@ -78,7 +78,7 @@ export function buildModelPerformanceLookup(
 ): Map<string, ModelPerformanceSeries> {
 	if (points.length === 0) return new Map();
 
-	const meta = rangeMeta(range);
+	const meta = rangeBucketMeta(range);
 	const bucketMs = meta.bucketMs;
 	const bucketCount = meta.bucketCount;
 

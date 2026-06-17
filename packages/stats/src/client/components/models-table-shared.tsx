@@ -6,6 +6,7 @@
  */
 
 import { format } from "date-fns";
+import { useTranslation } from "../i18n";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Line } from "react-chartjs-2";
 import type { ChartTheme } from "./chart-shared";
@@ -250,6 +251,8 @@ export function TrendEmpty() {
 }
 
 /** Placeholder shown in the expanded detail-chart slot when data is missing. */
-export function DetailChartEmpty({ message = "No data available" }: { message?: string }) {
-	return <div className="h-full flex items-center justify-center text-[var(--text-muted)] text-sm">{message}</div>;
+export function DetailChartEmpty({ message }: { message?: string }) {
+	const { t } = useTranslation();
+	const displayMessage = message ?? t("common.noData");
+	return <div className="h-full flex items-center justify-center text-[var(--text-muted)] text-sm">{displayMessage}</div>;
 }

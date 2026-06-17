@@ -1,11 +1,14 @@
 import { formatDistanceToNow } from "date-fns";
+import { zhCN } from "date-fns/locale";
+import type { Locale } from "../i18n";
 
 export function formatInteger(value: number): string {
 	return value.toLocaleString();
 }
 
-export function formatCompact(value: number): string {
-	return value.toLocaleString(undefined, { notation: "compact" });
+export function formatCompact(value: number, locale: "en" | "zh" = "en"): string {
+	const displayLocale = locale === "zh" ? "zh-CN" : "en-US";
+	return value.toLocaleString(displayLocale, { notation: "compact" });
 }
 
 export function formatCost(value: number, digits?: number): string {
@@ -33,6 +36,9 @@ export function formatTokensPerSecond(value: number | null): string {
 	return value.toFixed(1);
 }
 
-export function formatRelativeTime(timestamp: number): string {
-	return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+export function formatRelativeTime(timestamp: number, locale: Locale = "en"): string {
+	return formatDistanceToNow(new Date(timestamp), {
+		addSuffix: true,
+		locale: locale === "zh" ? zhCN : undefined,
+	});
 }

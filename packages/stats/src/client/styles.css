@@ -1321,3 +1321,36 @@
     transition: none;
   }
 }
+
+/* ==========================================================================
+   Language Select (dropdown for language switching)
+   ========================================================================== */
+.stats-language-select {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.stats-language-select:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.stats-language-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.1);
+}
+
+.stats-language-select option {
+  background: var(--surface);
+  color: var(--text);
+  padding: 4px 8px;
+}

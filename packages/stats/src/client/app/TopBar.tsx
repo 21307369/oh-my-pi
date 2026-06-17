@@ -1,8 +1,9 @@
 import { Menu } from "lucide-react";
+import { getLocale, setLocale, useTranslation } from "../i18n";
 import type { TimeRange } from "../types";
 import { RangeControl } from "./RangeControl";
 import type { DashboardSection } from "./routes";
-import { routes } from "./routes";
+import { getRoutes } from "./routes";
 import { SyncButton } from "./SyncButton";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -27,13 +28,15 @@ export function TopBar({
 	onMenuToggle,
 	className = "",
 }: TopBarProps) {
+	const { t } = useTranslation();
+	const routes = getRoutes(t);
 	const currentRoute = routes.find(r => r.id === activeSection);
-	const title = currentRoute?.label || "Observability";
+	const title = currentRoute?.label || t("topBar.observability");
 
 	const formatLastUpdated = (time: number | null) => {
-		if (!time) return "Not updated";
+		if (!time) return t("topBar.notUpdated");
 		const date = new Date(time);
-		return `Updated ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+		return `${t("topBar.updated")} ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
 	};
 
 	return (
@@ -44,7 +47,7 @@ export function TopBar({
 						type="button"
 						onClick={onMenuToggle}
 						className="stats-mobile-menu-btn"
-						aria-label="Open navigation menu"
+						aria-label={t("topBar.openMenu")}
 					>
 						<Menu size={20} />
 					</button>
@@ -63,6 +66,17 @@ export function TopBar({
 				</div>
 
 				<RangeControl value={range} onChange={onRangeChange} />
+
+				<select
+					value={getLocale()}
+					onChange={(e) => setLocale(e.target.value as "en" | "zh")}
+					className="stats-language-select"
+					aria-label={t("topBar.languageToggle")}
+					title={t("topBar.languageToggle")}
+				>
+					<option value="en">English</option>
+					<option value="zh">中文</option>
+				</select>
 
 				<ThemeToggle />
 

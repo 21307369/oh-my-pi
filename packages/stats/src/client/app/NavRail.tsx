@@ -1,4 +1,5 @@
-import { type DashboardSection, routes } from "./routes";
+import { useTranslation } from "../i18n";
+import { getRoutes, type DashboardSection } from "./routes";
 
 export interface NavRailProps {
 	activeSection: DashboardSection;
@@ -7,12 +8,15 @@ export interface NavRailProps {
 }
 
 export function NavRail({ activeSection, onSectionChange, className = "" }: NavRailProps) {
+	const { t } = useTranslation();
+	const routes = getRoutes(t);
+
 	return (
 		<aside className={`stats-nav-rail ${className}`}>
 			<div className="stats-nav-rail-header">
 				<div className="stats-logo-container">
 					<span className="stats-logo-text">OH MY PI</span>
-					<span className="stats-logo-subtext">Observability</span>
+					<span className="stats-logo-subtext">{t("nav.observability")}</span>
 				</div>
 			</div>
 
@@ -37,7 +41,7 @@ export function NavRail({ activeSection, onSectionChange, className = "" }: NavR
 			</nav>
 
 			<div className="stats-nav-rail-footer">
-				<span className="stats-version-tag">OMP Stats v1.0.0</span>
+				<span className="stats-version-tag">{t("nav.version", { version: "1.0.0" })}</span>
 			</div>
 		</aside>
 	);
