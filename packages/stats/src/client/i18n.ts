@@ -37,6 +37,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
 		// Time ranges
 		"range.all": "All",
+		"range.allTime": "all time",
 		"range.lastHour": "the last hour",
 		"range.last24h": "the last 24 hours",
 		"range.last7d": "the last 7 days",
@@ -350,6 +351,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
 		// Time ranges
 		"range.all": "全部",
+		"range.allTime": "全部时间",
 		"range.lastHour": "过去一小时",
 		"range.last24h": "过去24小时",
 		"range.last7d": "过去7天",

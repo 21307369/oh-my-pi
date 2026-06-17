@@ -65,7 +65,7 @@ const WINDOW_LABEL_KEY: Record<TimeRange, string> = {
 	"7d": "range.last7d",
 	"30d": "range.last30d",
 	"90d": "range.last90d",
-	all: "range.all",
+	all: "range.allTime",
 };
 
 export interface RangeBucketMeta {

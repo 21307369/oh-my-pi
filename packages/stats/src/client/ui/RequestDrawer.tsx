@@ -79,7 +79,7 @@ export function RequestDrawer({ id, onClose }: RequestDrawerProps) {
 
 	return (
 		<div className="stats-drawer-overlay" onClick={handleOverlayClick} role="presentation">
-			<div className="stats-drawer" role="dialog" aria-modal="true" aria-label={t("detail.close")}>
+			<div className="stats-drawer" role="dialog" aria-modal="true" aria-label={t("detail.title")}>
 				{/* Drawer Header */}
 				<div className="stats-drawer-header">
 					<div className="stats-drawer-header-left">

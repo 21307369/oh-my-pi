@@ -19,16 +19,16 @@ export function ThemeToggle() {
 	const { preference, setPreference } = useThemePreference();
 	const Icon = PREFERENCE_ICON[preference];
 
-	const labelKey = `theme.${preference}` as const;
-	const label = t(labelKey);
+	const nextPreference = NEXT_PREFERENCE[preference];
+	const nextLabelKey = `theme.${nextPreference}` as const;
+	const nextLabel = t(nextLabelKey);
 
 	return (
 		<button
 			type="button"
 			className="stats-theme-toggle"
-			onClick={() => setPreference(NEXT_PREFERENCE[preference])}
-			aria-label={t("theme.switchHint", { theme: label })}
-			title={t("theme.switchHint", { theme: label })}
+			aria-label={t("theme.switchHint", { theme: nextLabel })}
+			title={t("theme.switchHint", { theme: nextLabel })}
 		>
 			<Icon size={16} />
 		</button>
