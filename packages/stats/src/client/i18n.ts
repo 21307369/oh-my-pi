@@ -347,10 +347,13 @@ const translations: Record<Locale, Record<string, string>> = {
 		"nav.menu.open": "打开导航菜单",
 		"nav.menu.close": "关闭导航菜单",
 		"nav.menu.title": "导航菜单",
+		"nav.observability": "可观测性",
 
 		// Top bar
 		"topBar.notUpdated": "未更新",
 		"topBar.updated": "已更新 {time}",
+		"topBar.languageToggle": "切换语言",
+		"topBar.openMenu": "打开菜单",
 
 		// Time ranges
 		"range.all": "全部",
@@ -375,6 +378,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"theme.system": "系统主题",
 		"theme.light": "浅色主题",
 		"theme.dark": "深色主题",
+		"theme.switchHint": "切换到{theme}",
 
 		// Metrics
 		"metric.totalCost": "总成本",
@@ -432,6 +436,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"requests.title": "所有最近请求",
 		"requests.subtitle": "OMP 处理的最多50个最近请求",
 		"requests.noRequests": "未找到最近请求",
+		"requests.status.failed": "失败",
 		"requests.status.success": "成功",
 		"requests.column.time": "时间",
 		"requests.column.model": "模型",
@@ -452,6 +457,9 @@ const translations: Record<Locale, Record<string, string>> = {
 		"errors.column.tokens": "Tokens",
 		"errors.column.cost": "成本",
 		"errors.column.errorMessage": "错误信息",
+		"errors.status.failed": "失败",
+		"errors.unknownError": "未知错误",
+		"errors.noFailures": "无最近失败",
 
 		// Models route
 		"models.preference": "模型偏好",
