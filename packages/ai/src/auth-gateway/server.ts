@@ -229,9 +229,14 @@ export function classifyGatewayError(err: unknown): { status: number; type: stri
 	if (/\baborted\b|\babort signal\b/i.test(message)) {
 		return { status: 499, type: "request_aborted", message };
 	}
-	if (/\b(?:unauthorized|forbidden)\b/i.test(message)) {
-		return { status: 401, type: "authentication_error", message };
-	}
+	// Rate-limit check MUST run before unauthorized/forbidden: providers like
+	// DashScope (Alibaba Cloud China) sometimes return 429 messages containing
+	// both "rate limit" and "unauthorized" (e.g., "Rate limit exceeded -
+	// unauthorized due to throttling"). If the auth check ran first, these
+	// would be misclassified as 401, triggering credential deletion via
+	// `invalidateCredentialMatching` and prompting the user to re-enter their
+	// API key. Real auth errors (bad API key) never mention rate limits, so
+	// checking rate-limit patterns first is safe.
 	if (
 		// Match rate-limit phrasings without colliding with
 		// `GenerateContentRequest`, `accelerate`, `iterate`, `deprecated`, etc.
@@ -248,6 +253,9 @@ export function classifyGatewayError(err: unknown): { status: number; type: stri
 		isUsageLimitError(message)
 	) {
 		return { status: 429, type: "rate_limit_error", message };
+	}
+	if (/\b(?:unauthorized|forbidden)\b/i.test(message)) {
+		return { status: 401, type: "authentication_error", message };
 	}
 	if (/\b(?:unsupported|invalid_request|invalid request|bad request|malformed)\b/i.test(message)) {
 		return { status: 400, type: "invalid_request_error", message };

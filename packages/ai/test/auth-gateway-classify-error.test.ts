@@ -103,6 +103,32 @@ describe("auth-gateway classifyGatewayError", () => {
 		expect(c.type).toBe("request_aborted");
 	});
 
+	it("classifies rate-limit messages containing 'unauthorized' as 429, not 401 (DashScope China bug)", () => {
+		// DashScope China sometimes returns 429 messages with both "rate limit"
+		// and "unauthorized" wording. The rate-limit check must win so the
+		// credential is not deleted via invalidateCredentialMatching.
+		const cases = [
+			"Rate limit exceeded - unauthorized due to throttling",
+			"429 unauthorized: rate limit exceeded for your account",
+			"Request unauthorized - rate limit reached, please retry later",
+			"Throttling: unauthorized due to rate limit",
+		];
+		for (const msg of cases) {
+			const c = classifyGatewayError(new Error(msg));
+			expect({ msg, status: c.status, type: c.type }).toEqual({
+				msg,
+				status: 429,
+				type: "rate_limit_error",
+			});
+		}
+	});
+
+	it("still classifies pure 'unauthorized' without rate-limit wording as 401", () => {
+		const c = classifyGatewayError(new Error("unauthorized: invalid API key"));
+		expect(c.status).toBe(401);
+		expect(c.type).toBe("authentication_error");
+	});
+
 	it("falls through to 502 upstream_error when nothing matches", () => {
 		const c = classifyGatewayError(new Error("something inscrutable happened"));
 		expect(c.status).toBe(502);

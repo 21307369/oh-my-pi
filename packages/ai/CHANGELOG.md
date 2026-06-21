@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed DashScope (Alibaba Cloud China) 429 rate-limit errors being misclassified as 401 authentication errors when the error message contained both "rate limit" and "unauthorized" wording. The `classifyGatewayError` function now checks rate-limit patterns before auth patterns, preventing credential deletion via `invalidateCredentialMatching` and avoiding spurious "re-enter API key" prompts.
+
 ## [16.1.9] - 2026-06-21
 
 ### Added
