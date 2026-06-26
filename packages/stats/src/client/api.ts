@@ -6,6 +6,7 @@ import type {
 	MessageStats,
 	ModelDashboardStats,
 	OverviewStats,
+	PaginatedResult,
 	RequestDetails,
 	TimeRange,
 } from "./types";
@@ -54,12 +55,30 @@ export async function getCostDashboardStats(
 	return fetchJson<CostDashboardStats>(`${API_BASE}/stats/costs?range=${encodeURIComponent(range)}`, { signal });
 }
 
-export async function getRecentRequests(limit = 50, signal?: AbortSignal): Promise<MessageStats[]> {
-	return fetchJson<MessageStats[]>(`${API_BASE}/stats/recent?limit=${limit}`, { signal });
+export async function getRecentRequests(
+	limit = 50,
+	offset = 0,
+	model?: string,
+	signal?: AbortSignal,
+): Promise<PaginatedResult<MessageStats>> {
+	const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+	if (model) params.set("model", model);
+	return fetchJson<PaginatedResult<MessageStats>>(`${API_BASE}/stats/recent?${params}`, { signal });
 }
 
-export async function getRecentErrors(limit = 50, signal?: AbortSignal): Promise<MessageStats[]> {
-	return fetchJson<MessageStats[]>(`${API_BASE}/stats/errors?limit=${limit}`, { signal });
+export async function getRecentErrors(
+	limit = 50,
+	offset = 0,
+	model?: string,
+	signal?: AbortSignal,
+): Promise<PaginatedResult<MessageStats>> {
+	const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+	if (model) params.set("model", model);
+	return fetchJson<PaginatedResult<MessageStats>>(`${API_BASE}/stats/errors?${params}`, { signal });
+}
+
+export async function getModelList(signal?: AbortSignal): Promise<string[]> {
+	return fetchJson<string[]>(`${API_BASE}/stats/models-list`, { signal });
 }
 
 export async function getRequestDetails(id: number, signal?: AbortSignal): Promise<RequestDetails> {

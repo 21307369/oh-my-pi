@@ -1,10 +1,12 @@
-import { useMemo } from "react";
-import { getRecentErrors } from "../api";
+import { useMemo, useState } from "react";
+import { getModelList, getRecentErrors } from "../api";
 import { formatCost, formatInteger, formatRelativeTime } from "../data/formatters";
 import { useResource } from "../data/useResource";
 import { useTranslation } from "../i18n";
 import type { MessageStats, TimeRange } from "../types";
-import { AsyncBoundary, DataTable, Panel, StatusPill } from "../ui";
+import { AsyncBoundary, DataTable, ModelFilter, Pagination, Panel, StatusPill } from "../ui";
+
+const PAGE_SIZE = 50;
 
 export interface ErrorsRouteProps {
 	active: boolean;
@@ -15,15 +17,35 @@ export interface ErrorsRouteProps {
 
 export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRouteProps) {
 	const { t, locale } = useTranslation();
+	const [page, setPage] = useState(1);
+	const [modelFilter, setModelFilter] = useState<string | null>(null);
 
-	const {
-		data: recentErrors,
-		error,
-		loading,
-	} = useResource(["recent-errors-dense", refreshTrigger], signal => getRecentErrors(50, signal), {
-		pollMs: 30000,
+	const offset = (page - 1) * PAGE_SIZE;
+
+	const { data: models } = useResource(["models-list"], signal => getModelList(signal), {
 		enabled: active,
 	});
+
+	const {
+		data: result,
+		error,
+		loading,
+	} = useResource(
+		["recent-errors-dense", refreshTrigger, page, modelFilter],
+		signal => getRecentErrors(PAGE_SIZE, offset, modelFilter ?? undefined, signal),
+		{
+			pollMs: 30000,
+			enabled: active,
+		},
+	);
+
+	const recentErrors = result?.items ?? null;
+	const total = result?.total ?? 0;
+
+	const handleModelChange = (model: string | null) => {
+		setModelFilter(model);
+		setPage(1);
+	};
 
 	const columns = useMemo(
 		() => [
@@ -99,7 +121,11 @@ export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRo
 
 	return (
 		<div className="stats-route-container">
-			<Panel title={t("errors.title")} subtitle={t("errors.subtitle")}>
+			<Panel
+				title={t("errors.title")}
+				subtitle={t("errors.subtitle")}
+				actions={<ModelFilter models={models ?? []} value={modelFilter} onChange={handleModelChange} />}
+			>
 				<AsyncBoundary loading={loading} error={error} data={recentErrors} emptyText={t("errors.noFailures")}>
 					<DataTable
 						columns={columns}
@@ -110,6 +136,7 @@ export function ErrorsRoute({ active, refreshTrigger, onRequestClick }: ErrorsRo
 						emptyText={t("errors.noFailures")}
 					/>
 				</AsyncBoundary>
+				<Pagination currentPage={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
 			</Panel>
 		</div>
 	);

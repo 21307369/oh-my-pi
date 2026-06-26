@@ -31,13 +31,14 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 	});
 
 	const {
-		data: recentRequests,
+		data: recentRequestsResult,
 		error: requestsError,
 		loading: requestsLoading,
-	} = useResource(["recent-requests", refreshTrigger], signal => getRecentRequests(50, signal), {
+	} = useResource(["recent-requests", refreshTrigger], signal => getRecentRequests(10, 0, undefined, signal), {
 		pollMs: 30000,
 		enabled: active,
 	});
+	const recentRequests = recentRequestsResult?.items ?? null;
 
 	const theme = useSystemTheme();
 	const chartTheme = CHART_THEMES[theme];
@@ -217,10 +218,7 @@ export function OverviewRoute({ active, range, refreshTrigger, onRequestClick }:
 		</div>
 	);
 
-	const previewRequests = useMemo(() => {
-		if (!recentRequests) return [];
-		return recentRequests.slice(0, 10);
-	}, [recentRequests]);
+	const previewRequests = recentRequests ?? [];
 
 	return (
 		<div className="stats-route-container space-y-6">

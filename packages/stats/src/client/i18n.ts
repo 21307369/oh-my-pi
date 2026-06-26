@@ -134,6 +134,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"requests.column.tokensPerSec": "Tokens/s",
 		"requests.column.duration": "Duration",
 		"requests.column.cost": "Cost",
+		"requests.filterAllModels": "All models",
 
 		// Errors route
 		"errors.title": "Recent Errors",
@@ -328,6 +329,13 @@ const translations: Record<Locale, Record<string, string>> = {
 		"json.copiedToClipboard": "Copied to clipboard",
 		"json.show": "Show",
 		"json.hide": "Hide",
+
+		// Pagination
+		"pagination.navigation": "Pagination",
+		"pagination.previous": "Previous page",
+		"pagination.next": "Next page",
+		"pagination.goToPage": "Go to page {page}",
+		"pagination.pageInfo": "Page {current} of {total}",
 	},
 
 	zh: {
@@ -444,6 +452,7 @@ const translations: Record<Locale, Record<string, string>> = {
 		"requests.column.tokensPerSec": "Tokens/秒",
 		"requests.column.cost": "成本",
 		"requests.column.duration": "耗时",
+		"requests.filterAllModels": "所有模型",
 
 		// Errors route
 		"errors.title": "最近错误",
@@ -640,6 +649,13 @@ const translations: Record<Locale, Record<string, string>> = {
 		"json.copiedToClipboard": "已复制到剪贴板",
 		"json.show": "显示",
 		"json.hide": "隐藏",
+
+		// Pagination
+		"pagination.navigation": "分页导航",
+		"pagination.previous": "上一页",
+		"pagination.next": "下一页",
+		"pagination.goToPage": "跳转到第 {page} 页",
+		"pagination.pageInfo": "第 {current} 页，共 {total} 页",
 	},
 };
 let currentLocale: Locale;

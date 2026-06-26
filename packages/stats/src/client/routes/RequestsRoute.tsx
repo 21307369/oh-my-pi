@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { getRecentRequests } from "../api";
+import { useMemo, useState } from "react";
+import { getModelList, getRecentRequests } from "../api";
 import {
 	formatCost,
 	formatDurationMs,
@@ -10,7 +10,10 @@ import {
 import { useResource } from "../data/useResource";
 import { useTranslation } from "../i18n";
 import type { MessageStats, TimeRange } from "../types";
-import { AsyncBoundary, DataTable, Panel, StatusPill } from "../ui";
+import { AsyncBoundary, DataTable, ModelFilter, Pagination, Panel, StatusPill } from "../ui";
+
+const PAGE_SIZE = 50;
+
 export interface RequestsRouteProps {
 	active: boolean;
 	range: TimeRange;
@@ -20,15 +23,37 @@ export interface RequestsRouteProps {
 
 export function RequestsRoute({ active, refreshTrigger, onRequestClick }: RequestsRouteProps) {
 	const { t, locale } = useTranslation();
+	const [page, setPage] = useState(1);
+	const [modelFilter, setModelFilter] = useState<string | null>(null);
 
-	const {
-		data: recentRequests,
-		error,
-		loading,
-	} = useResource(["recent-requests-dense", refreshTrigger], signal => getRecentRequests(50, signal), {
-		pollMs: 30000,
+	const offset = (page - 1) * PAGE_SIZE;
+
+	// Fetch model list for the filter dropdown
+	const { data: models } = useResource(["models-list"], signal => getModelList(signal), {
 		enabled: active,
 	});
+
+	const {
+		data: result,
+		error,
+		loading,
+	} = useResource(
+		["recent-requests-dense", refreshTrigger, page, modelFilter],
+		signal => getRecentRequests(PAGE_SIZE, offset, modelFilter ?? undefined, signal),
+		{
+			pollMs: 30000,
+			enabled: active,
+		},
+	);
+
+	const recentRequests = result?.items ?? null;
+	const total = result?.total ?? 0;
+
+	const handleModelChange = (model: string | null) => {
+		setModelFilter(model);
+		setPage(1);
+	};
+
 	const columns = useMemo(
 		() => [
 			{
@@ -143,7 +168,11 @@ export function RequestsRoute({ active, refreshTrigger, onRequestClick }: Reques
 
 	return (
 		<div className="stats-route-container">
-			<Panel title={t("requests.title")} subtitle={t("requests.subtitle")}>
+			<Panel
+				title={t("requests.title")}
+				subtitle={t("requests.subtitle")}
+				actions={<ModelFilter models={models ?? []} value={modelFilter} onChange={handleModelChange} />}
+			>
 				<AsyncBoundary loading={loading} error={error} data={recentRequests}>
 					<DataTable
 						columns={columns}
@@ -154,6 +183,7 @@ export function RequestsRoute({ active, refreshTrigger, onRequestClick }: Reques
 						emptyText={t("requests.noRequests")}
 					/>
 				</AsyncBoundary>
+				<Pagination currentPage={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
 			</Panel>
 		</div>
 	);
