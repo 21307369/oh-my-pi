@@ -146,9 +146,10 @@ function translateOption(path: string, option: SubmenuOption): SubmenuOption {
 	return {
 		...option,
 		label: i18n.t(`${path}.options.${option.value}.label`, option.label),
-		description: option.description !== undefined
-			? i18n.t(`${path}.options.${option.value}.description`, option.description)
-			: undefined,
+		description:
+			option.description !== undefined
+				? i18n.t(`${path}.options.${option.value}.description`, option.description)
+				: undefined,
 	};
 }
 
