@@ -27,6 +27,7 @@ import {
 import { declareWorkerHostEntry, installWorkerInbox } from "@oh-my-pi/pi-utils/worker-host";
 import { installProfileAlias, resolveProfileAliasCommandFromProcess } from "./cli/profile-alias";
 import { extractProfileFlags } from "./cli/profile-bootstrap";
+import { i18n } from "./i18n";
 
 if (Bun.semver.order(Bun.version, MIN_BUN_VERSION) < 0) {
 	process.stderr.write(
@@ -46,11 +47,18 @@ process.title = APP_NAME;
 async function showHelp(config: CliConfig): Promise<void> {
 	const { renderRootHelp } = await import("@oh-my-pi/pi-utils/cli");
 	const { getExtraHelpText } = await import("./cli/args");
-	renderRootHelp(config);
+	renderRootHelp(config, translator);
 	const extra = getExtraHelpText();
 	if (extra.trim().length > 0) {
 		process.stdout.write(`\n${extra}\n`);
 	}
+}
+
+/** Translator function for i18n - returns translated text or original if not found */
+function translator(text: string, key: string): string {
+	const translated = i18n.t(key);
+	// If translation returns the key itself, use original text
+	return translated === key ? text : translated;
 }
 /**
  * Smoke-test entry. Spawns bundled workers, serves the stats dashboard once,
@@ -307,7 +315,14 @@ export async function runCli(argv: string[]): Promise<void> {
 		process.exitCode = 1;
 		return;
 	}
-	return run({ bin: APP_NAME, version: VERSION, argv: resolved.argv, commands, help: showHelp });
+	return run({
+		bin: APP_NAME,
+		version: VERSION,
+		argv: resolved.argv,
+		commands,
+		help: showHelp,
+		translator,
+	});
 }
 
 // Floating call instead of top-level await: TLA forces `--bytecode` (CJS
