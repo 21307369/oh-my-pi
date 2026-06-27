@@ -114,6 +114,7 @@ export const TAB_GROUPS: Record<SettingTab, readonly string[]> = {
 	appearance: ["Theme", "Status Line", "Display", "Images"],
 	model: ["Thinking", "Sampling", "Prompt", "Retry & Fallback", "Advisor", "Vision"],
 	interaction: [
+		"General",
 		"Input",
 		"Approvals",
 		"Notifications",
@@ -1336,6 +1337,22 @@ export const SETTINGS_SCHEMA = {
 	// ────────────────────────────────────────────────────────────────────────
 	// Interaction
 	// ────────────────────────────────────────────────────────────────────────
+
+	// Language
+	"i18n.language": {
+		type: "string",
+		default: "en",
+		ui: {
+			tab: "interaction",
+			group: "General",
+			label: "Language",
+			description: "UI language (requires restart)",
+			options: [
+				{ value: "en", label: "English" },
+				{ value: "zh", label: "中文" },
+			],
+		},
+	},
 
 	// Conversation flow
 	steeringMode: {
