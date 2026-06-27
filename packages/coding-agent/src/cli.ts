@@ -254,6 +254,10 @@ export async function runCli(argv: string[]): Promise<void> {
 			// profile instead of the default agent directory.
 			setProfile(resolveProfileEnv(process.env.OMP_PROFILE, process.env.PI_PROFILE));
 		}
+
+		// Initialize i18n system after profile is set
+		await i18n.init();
+
 		if (extracted.aliasName !== undefined) {
 			const profile = extracted.profile ?? getActiveProfile();
 			if (!profile) {
