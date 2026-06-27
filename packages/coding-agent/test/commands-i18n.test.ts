@@ -1,8 +1,8 @@
 /**
  * Tests for i18n integration in command help system
  */
-import { describe, expect, test, beforeEach, afterEach } from "bun:test";
-import { renderRootHelp, renderCommandHelp, type CliConfig, type CommandCtor, Command } from "@oh-my-pi/pi-utils/cli";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { type CliConfig, Command, type CommandCtor, renderCommandHelp, renderRootHelp } from "@oh-my-pi/pi-utils/cli";
 
 // Mock command for testing
 class MockCommand extends Command {
