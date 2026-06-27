@@ -1,7 +1,7 @@
-import { describe, expect, test, beforeEach, afterEach } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import * as fs from "node:fs";
-import * as path from "node:path";
 import * as os from "node:os";
+import * as path from "node:path";
 import { i18n } from "../src/i18n";
 
 describe("settings i18n integration", () => {
@@ -73,10 +73,7 @@ describe("settings i18n integration", () => {
 			"tabs.model.label": "模型",
 			"tabs.interaction.label": "交互",
 		};
-		await fs.promises.writeFile(
-			path.join(tempDir, "zh-ui.json"),
-			JSON.stringify(translations),
-		);
+		await fs.promises.writeFile(path.join(tempDir, "zh-ui.json"), JSON.stringify(translations));
 
 		// Initialize i18n with temp dir
 		i18n.reset(tempDir);
@@ -109,10 +106,7 @@ describe("settings i18n integration", () => {
 			"tabs.interaction.groups.Input": "输入",
 			"tabs.appearance.groups.Theme": "主题",
 		};
-		await fs.promises.writeFile(
-			path.join(tempDir, "zh-groups.json"),
-			JSON.stringify(translations),
-		);
+		await fs.promises.writeFile(path.join(tempDir, "zh-groups.json"), JSON.stringify(translations));
 
 		i18n.reset(tempDir);
 		await i18n.init();
@@ -141,10 +135,7 @@ describe("settings i18n integration", () => {
 			"theme.dark.label": "深色主题",
 			"theme.dark.description": "深色模式下使用的主题",
 		};
-		await fs.promises.writeFile(
-			path.join(tempDir, "zh-settings.json"),
-			JSON.stringify(translations),
-		);
+		await fs.promises.writeFile(path.join(tempDir, "zh-settings.json"), JSON.stringify(translations));
 
 		i18n.reset(tempDir);
 		await i18n.init();
