@@ -6,6 +6,7 @@ import { type AutocompleteItem, Spacer } from "@oh-my-pi/pi-tui";
 import { APP_NAME, getProjectDir, setProjectDir } from "@oh-my-pi/pi-utils";
 import { COLLAB_GUEST_ALLOWED_COMMANDS, CollabGuestLink } from "../collab/guest";
 import { CollabHost } from "../collab/host";
+import { i18n } from "../i18n";
 import type { SettingPath, SettingValue } from "../config/settings";
 import { settings } from "../config/settings";
 import {
@@ -2425,8 +2426,18 @@ function materializeTuiBuiltinSlashCommand(
 	cmd: BuiltinSlashCommand,
 	runtime?: TuiSlashCommandRuntime,
 ): TuiBuiltinSlashCommand {
-	const materialized: TuiBuiltinSlashCommand = { ...cmd };
+	const materialized: TuiBuiltinSlashCommand = {
+		...cmd,
+		description: i18n.t(`commands.${cmd.name}.description`, cmd.description),
+	};
+	if (cmd.acpDescription) {
+		materialized.acpDescription = i18n.t(`commands.${cmd.name}.acpDescription`, cmd.acpDescription);
+	}
 	if (cmd.subcommands) {
+		materialized.subcommands = cmd.subcommands.map(sub => ({
+			...sub,
+			description: i18n.t(`commands.${cmd.name}.subcommands.${sub.name}`, sub.description),
+		}));
 		materialized.getArgumentCompletions = buildArgumentCompletions(cmd.subcommands);
 		materialized.getInlineHint = buildSubcommandInlineHint(cmd.subcommands);
 	} else if (cmd.name === "move") {
