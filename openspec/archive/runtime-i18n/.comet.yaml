@@ -17,6 +17,6 @@ verification_report: openspec/changes/runtime-i18n/verification-report.md
 branch_status: handled
 created_at: 2026-06-27
 verified_at: 2026-06-28
-archived: false
+archived: true
 handoff_context: openspec/changes/runtime-i18n/.comet/handoff/design-context.json
 handoff_hash: cdbb4db2323e278b213acffc56d9623bccd8b04e4e614efd0ac0d5ac842614ac
