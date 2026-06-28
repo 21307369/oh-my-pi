@@ -358,6 +358,19 @@ const tokenOutSegment: StatusLineSegment = {
 	},
 };
 
+const tokenIoSegment: StatusLineSegment = {
+	id: "token_io",
+	render(ctx) {
+		const { input, output } = ctx.usageStats;
+		if (!input && !output) return { content: "", visible: false };
+
+		const inText = input ? `${theme.icon.input} ${formatNumber(input)}` : `${theme.icon.input} 0`;
+		const outText = output ? `${theme.icon.output} ${formatNumber(output)}` : `${theme.icon.output} 0`;
+		const content = `${theme.fg("statusLineSpend", inText)}${theme.fg("dim", "/")}${theme.fg("statusLineOutput", outText)}`;
+		return { content, visible: true };
+	},
+};
+
 const tokenTotalSegment: StatusLineSegment = {
 	id: "token_total",
 	render(ctx) {
@@ -379,7 +392,7 @@ const tokenRateSegment: StatusLineSegment = {
 		const { tokensPerSecond } = ctx.usageStats;
 		if (!tokensPerSecond) return { content: "", visible: false };
 
-		const content = withIcon(theme.icon.output, `${tokensPerSecond.toFixed(1)}/s`);
+		const content = withIcon(theme.icon.fast, `${tokensPerSecond.toFixed(1)}/s`);
 		return { content: theme.fg("statusLineOutput", content), visible: true };
 	},
 };
@@ -498,7 +511,7 @@ const cacheReadSegment: StatusLineSegment = {
 		const { cacheRead } = ctx.usageStats;
 		if (!cacheRead) return { content: "", visible: false };
 
-		const parts = [theme.icon.cache, theme.icon.output, formatNumber(cacheRead)].filter(Boolean);
+		const parts = [theme.icon.cache, formatNumber(cacheRead)].filter(Boolean);
 		const content = parts.join(" ");
 		return { content: theme.fg("statusLineSpend", content), visible: true };
 	},
@@ -635,6 +648,7 @@ export const SEGMENTS: Record<StatusLineSegmentId, StatusLineSegment> = {
 	subagents: subagentsSegment,
 	token_in: tokenInSegment,
 	token_out: tokenOutSegment,
+	token_io: tokenIoSegment,
 	token_total: tokenTotalSegment,
 	token_rate: tokenRateSegment,
 	cost: costSegment,

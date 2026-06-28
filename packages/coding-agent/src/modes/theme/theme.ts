@@ -307,18 +307,18 @@ const UNICODE_SYMBOLS: SymbolMap = {
 	"icon.git": "⎇",
 	"icon.branch": "⑂",
 	"icon.pr": "⤴",
-	"icon.tokens": "🪙",
-	"icon.context": "◫",
-	"icon.cost": "💲",
-	"icon.time": "⏱",
+	"icon.tokens": "📊",
+	"icon.context": "",
+	"icon.cost": "",
+	"icon.time": "◷",
 	"icon.pi": "π",
 	"icon.ghost": "👻",
 	"icon.agents": "👥",
 	"icon.job": "⚙",
-	"icon.cache": "💾",
+	"icon.cache": "🚀",
 	"icon.cacheMiss": "⊘",
-	"icon.input": "⤵",
-	"icon.output": "⤴",
+	"icon.input": "↓",
+	"icon.output": "↑",
 	"icon.host": "🖥",
 	"icon.session": "🆔",
 	"icon.package": "📦",
@@ -573,13 +573,13 @@ const NERD_SYMBOLS: SymbolMap = {
 	"icon.branch": "\uf126",
 	// pick:  (nf-cod-git_pull_request) | alt:  (nf-oct-git_pull_request)
 	"icon.pr": "\uea64",
-	// pick:  | alt: ⊛ ◍ 
-	"icon.tokens": "\ue26b",
-	// pick:  | alt: ◫ ▦
+	// pick:  (nf-fa-bar_chart) | alt:  ⊛
+	"icon.tokens": "\uf080",
+	// pick:  | alt: ▰ ▦
 	"icon.context": "\ue70f",
 	// pick:  | alt: $ ¢
 	"icon.cost": "\uf155",
-	// pick:  | alt: ◷ ◴
+	// pick:  | alt: ◷ ◴
 	"icon.time": "\uf017",
 	// pick:  | alt: π ∏ ∑
 	"icon.pi": "\ue22c",
@@ -589,14 +589,14 @@ const NERD_SYMBOLS: SymbolMap = {
 	"icon.agents": "\uf0c0",
 	// pick:  (nf-fa-gear) | alt:  ⚙
 	"icon.job": "\uf013",
-	// pick:  | alt:  
-	"icon.cache": "\uf1c0",
+	// pick:  (nf-fa-rocket) | alt:
+	"icon.cache": "\uf135",
 	// pick:  (fa-ban) | alt: ⊘
 	"icon.cacheMiss": "\uf05e",
-	// pick:  | alt:  →
-	"icon.input": "\uf090",
-	// pick:  | alt:  →
-	"icon.output": "\uf08b",
+	// pick:  (nf-fa-arrow_down) | alt:  ↓
+	"icon.input": "\uf063",
+	// pick:  (nf-fa-arrow_up) | alt:  ↑
+	"icon.output": "\uf062",
 	// pick:  | alt:  
 	"icon.host": "\uf109",
 	// pick:  | alt:  
