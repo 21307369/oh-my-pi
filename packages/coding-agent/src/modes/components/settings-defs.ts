@@ -145,10 +145,10 @@ function resolveOptions(ui: AnyUiMetadata): OptionList | "runtime" | undefined {
 function translateOption(path: string, option: SubmenuOption): SubmenuOption {
 	return {
 		...option,
-		label: i18n.t(`${path}.options.${option.value}.label`, option.label),
+		label: i18n.t(`settings.${path}.options.${option.value}.label`, option.label),
 		description:
 			option.description !== undefined
-				? i18n.t(`${path}.options.${option.value}.description`, option.description)
+				? i18n.t(`settings.${path}.options.${option.value}.description`, option.description)
 				: undefined,
 	};
 }
@@ -161,8 +161,8 @@ function pathToSettingDef(path: SettingPath): SettingDef | null {
 	const condition = ui.condition ? CONDITIONS[ui.condition] : undefined;
 	const base = {
 		path,
-		label: i18n.t(`${path}.label`, ui.label),
-		description: i18n.t(`${path}.description`, ui.description),
+		label: i18n.t(`settings.${path}.label`, ui.label),
+		description: i18n.t(`settings.${path}.description`, ui.description),
 		tab: ui.tab,
 		group: ui.group,
 		condition,
@@ -275,5 +275,11 @@ export function getTabLabel(tab: SettingTab): string {
 
 /** Get translated group title, falling back to the raw group string */
 export function getGroupLabel(tab: SettingTab, group: string): string {
+	const groups = TAB_GROUPS[tab];
+	const index = groups.indexOf(group);
+	if (index >= 0) {
+		const translated = i18n.t(`tabs.${tab}.groups.${index}`);
+		if (translated !== `tabs.${tab}.groups.${index}`) return translated;
+	}
 	return i18n.t(`tabs.${tab}.groups.${group}`, group);
 }
