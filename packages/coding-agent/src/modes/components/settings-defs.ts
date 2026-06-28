@@ -23,9 +23,8 @@ import {
 	type SettingTab,
 	type SubmenuOption,
 	TAB_GROUPS,
-	TAB_METADATA,
 } from "../../config/settings-schema";
-import { i18n } from "../../i18n";
+import { interceptSettingDefs } from "../../i18n/interceptor";
 
 // ═══════════════════════════════════════════════════════════════════════════
 // UI Definition Types
@@ -141,32 +140,13 @@ function resolveOptions(ui: AnyUiMetadata): OptionList | "runtime" | undefined {
 	return ui.options;
 }
 
-/** Translate a SubmenuOption's label and description using i18n */
-function translateOption(path: string, option: SubmenuOption): SubmenuOption {
-	return {
-		...option,
-		label: i18n.t(`settings.${path}.options.${option.value}.label`, option.label),
-		description:
-			option.description !== undefined
-				? i18n.t(`settings.${path}.options.${option.value}.description`, option.description)
-				: undefined,
-	};
-}
-
 function pathToSettingDef(path: SettingPath): SettingDef | null {
 	const ui = getUi(path);
 	if (!ui) return null;
 
 	const schemaType = getType(path);
 	const condition = ui.condition ? CONDITIONS[ui.condition] : undefined;
-	const base = {
-		path,
-		label: i18n.t(`settings.${path}.label`, ui.label),
-		description: i18n.t(`settings.${path}.description`, ui.description),
-		tab: ui.tab,
-		group: ui.group,
-		condition,
-	};
+	const base = { path, label: ui.label, description: ui.description, tab: ui.tab, group: ui.group, condition };
 
 	if (schemaType === "boolean") {
 		return { ...base, type: "boolean" };
@@ -180,14 +160,13 @@ function pathToSettingDef(path: SettingPath): SettingDef | null {
 		}
 		// "runtime" is not a valid sentinel for enums — schema types prevent this,
 		// but treat defensively as an empty submenu.
-		const resolvedOptions = options === "runtime" ? [] : options;
-		return { ...base, type: "submenu", options: resolvedOptions.map(o => translateOption(path, o)) };
+		return { ...base, type: "submenu", options: options === "runtime" ? [] : options };
 	}
 
 	if (schemaType === "number") {
 		// Numbers without options are intentionally hidden from the UI.
 		if (!options || options === "runtime") return null;
-		return { ...base, type: "submenu", options: options.map(o => translateOption(path, o)) };
+		return { ...base, type: "submenu", options };
 	}
 
 	if (schemaType === "string") {
@@ -196,7 +175,7 @@ function pathToSettingDef(path: SettingPath): SettingDef | null {
 			return { ...base, type: "submenu", options: [] };
 		}
 		if (options) {
-			return { ...base, type: "submenu", options: options.map(o => translateOption(path, o)) };
+			return { ...base, type: "submenu", options };
 		}
 		return { ...base, type: "text" };
 	}
@@ -220,7 +199,7 @@ export function invalidateSettingDefsCache(): void {
 	cachedDefs = null;
 }
 
-/** Get all setting definitions with UI */
+/** Get all setting definitions with UI — translations intercepted at output boundary */
 export function getAllSettingDefs(): SettingDef[] {
 	if (cachedDefs) return cachedDefs;
 
@@ -231,8 +210,8 @@ export function getAllSettingDefs(): SettingDef[] {
 			if (def) defs.push(def);
 		}
 	}
-	cachedDefs = defs;
-	return defs;
+	cachedDefs = interceptSettingDefs(defs);
+	return cachedDefs;
 }
 
 /**
@@ -262,24 +241,4 @@ export function getDisplayDefault(path: SettingPath): string {
 	if (value === undefined) return "";
 	if (typeof value === "boolean") return value ? "true" : "false";
 	return String(value);
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// i18n: Tab & Group Translation
-// ═══════════════════════════════════════════════════════════════════════════
-
-/** Get translated tab label, falling back to the English label from TAB_METADATA */
-export function getTabLabel(tab: SettingTab): string {
-	return i18n.t(`tabs.${tab}.label`, TAB_METADATA[tab].label);
-}
-
-/** Get translated group title, falling back to the raw group string */
-export function getGroupLabel(tab: SettingTab, group: string): string {
-	const groups = TAB_GROUPS[tab];
-	const index = groups.indexOf(group);
-	if (index >= 0) {
-		const translated = i18n.t(`tabs.${tab}.groups.${index}`);
-		if (translated !== `tabs.${tab}.groups.${index}`) return translated;
-	}
-	return i18n.t(`tabs.${tab}.groups.${group}`, group);
 }

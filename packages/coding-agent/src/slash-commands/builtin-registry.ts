@@ -24,6 +24,7 @@ import {
 	getPluginsCacheDir,
 	MarketplaceManager,
 } from "../extensibility/plugins/marketplace";
+import { interceptSlashCommand } from "../i18n/interceptor";
 import { resolveMemoryBackend } from "../memory-backend";
 import { describeLoopLimitRuntime } from "../modes/loop-limit";
 import { theme } from "../modes/theme/theme";
@@ -2417,18 +2418,22 @@ function materializeTuiBuiltinSlashCommand(
 	cmd: BuiltinSlashCommand,
 	runtime?: TuiSlashCommandRuntime,
 ): TuiBuiltinSlashCommand {
+	const translated = interceptSlashCommand({
+		name: cmd.name,
+		description: cmd.description,
+		subcommands: cmd.subcommands,
+	});
 	const materialized: TuiBuiltinSlashCommand = {
 		...cmd,
-		description: i18n.t(`commands.${cmd.name}.description`, cmd.description),
+		description: translated.description,
 	};
-	if (cmd.acpDescription) {
-		materialized.acpDescription = i18n.t(`commands.${cmd.name}.acpDescription`, cmd.acpDescription);
+	if (translated.subcommands) {
+		materialized.subcommands = cmd.subcommands!.map((sub, i) => ({
+			...sub,
+			description: translated.subcommands![i].description,
+		}));
 	}
 	if (cmd.subcommands) {
-		materialized.subcommands = cmd.subcommands.map(sub => ({
-			...sub,
-			description: i18n.t(`commands.${cmd.name}.subcommands.${sub.name}`, sub.description),
-		}));
 		materialized.getArgumentCompletions = buildArgumentCompletions(cmd.subcommands);
 		materialized.getInlineHint = buildSubcommandInlineHint(cmd.subcommands);
 	} else if (cmd.name === "move") {

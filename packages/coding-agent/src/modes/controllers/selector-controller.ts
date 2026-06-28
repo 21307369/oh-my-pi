@@ -78,6 +78,8 @@ import { TreeSelectorComponent } from "../components/tree-selector";
 import { UserMessageSelectorComponent } from "../components/user-message-selector";
 import type { SessionObserverRegistry } from "../session-observer-registry";
 import { buildCopyTargets } from "../utils/copy-targets";
+import { i18n } from "../../i18n";
+import { invalidateTipsCache } from "../components/welcome";
 
 const MANUAL_LOGIN_TIP = "Tip: You can complete pairing with /login <redirect URL>.";
 
@@ -491,6 +493,14 @@ export class SelectorController {
 			case "colorBlindMode": {
 				setColorBlindMode(value === "true" || value === true).then(() => {
 					this.ctx.ui.invalidate();
+				});
+				break;
+			}
+			case "i18n.language": {
+				const lang = typeof value === "string" ? value : String(value);
+				void i18n.setLanguage(lang).then(() => {
+					invalidateTipsCache();
+					this.ctx.ui.requestRender();
 				});
 				break;
 			}

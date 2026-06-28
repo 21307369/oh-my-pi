@@ -79,11 +79,11 @@ describe("settings i18n integration", () => {
 		i18n.reset(tempDir);
 		await i18n.init();
 
-		const { getTabLabel } = await import("../src/modes/components/settings-defs");
+		const { interceptTabLabel } = await import("../src/i18n/interceptor");
 
-		expect(getTabLabel("appearance")).toBe("外观");
-		expect(getTabLabel("model")).toBe("模型");
-		expect(getTabLabel("interaction")).toBe("交互");
+		expect(interceptTabLabel("appearance", "Appearance")).toBe("外观");
+		expect(interceptTabLabel("model", "Model")).toBe("模型");
+		expect(interceptTabLabel("interaction", "Interaction")).toBe("交互");
 	});
 
 	test("getTabLabel falls back to English when no translation", async () => {
@@ -93,11 +93,11 @@ describe("settings i18n integration", () => {
 		i18n.reset(tempDir);
 		await i18n.init();
 
-		const { getTabLabel } = await import("../src/modes/components/settings-defs");
+		const { interceptTabLabel } = await import("../src/i18n/interceptor");
 
 		// No translation for these, should fall back to English
-		expect(getTabLabel("appearance")).toBe("Appearance");
-		expect(getTabLabel("context")).toBe("Context");
+		expect(interceptTabLabel("appearance", "Appearance")).toBe("Appearance");
+		expect(interceptTabLabel("context", "Context")).toBe("Context");
 	});
 
 	test("getGroupLabel returns translated group when translation exists", async () => {
@@ -111,11 +111,11 @@ describe("settings i18n integration", () => {
 		i18n.reset(tempDir);
 		await i18n.init();
 
-		const { getGroupLabel } = await import("../src/modes/components/settings-defs");
+		const { interceptGroupLabel } = await import("../src/i18n/interceptor");
 
-		expect(getGroupLabel("interaction", "General")).toBe("常规");
-		expect(getGroupLabel("interaction", "Input")).toBe("输入");
-		expect(getGroupLabel("appearance", "Theme")).toBe("主题");
+		expect(interceptGroupLabel("interaction", "General")).toBe("常规");
+		expect(interceptGroupLabel("interaction", "Input")).toBe("输入");
+		expect(interceptGroupLabel("appearance", "Theme")).toBe("主题");
 	});
 
 	test("getGroupLabel falls back to English when no translation", async () => {
@@ -124,10 +124,10 @@ describe("settings i18n integration", () => {
 		i18n.reset(tempDir);
 		await i18n.init();
 
-		const { getGroupLabel } = await import("../src/modes/components/settings-defs");
+		const { interceptGroupLabel } = await import("../src/i18n/interceptor");
 
-		expect(getGroupLabel("interaction", "General")).toBe("General");
-		expect(getGroupLabel("interaction", "Input")).toBe("Input");
+		expect(interceptGroupLabel("interaction", "General")).toBe("General");
+		expect(interceptGroupLabel("interaction", "Input")).toBe("Input");
 	});
 
 	test("getAllSettingDefs translates labels and descriptions", async () => {

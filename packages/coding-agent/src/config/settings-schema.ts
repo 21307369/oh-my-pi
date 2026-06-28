@@ -1401,10 +1401,10 @@ export const SETTINGS_SCHEMA = {
 			tab: "interaction",
 			group: "General",
 			label: "Language",
-			description: "UI language (requires restart)",
+			description: "UI language (applies on next screen refresh)",
 			options: [
 				{ value: "en", label: "English" },
-				{ value: "zh", label: "中文" },
+				{ value: "zh", label: "简体中文" },
 			],
 		},
 	},

@@ -73,10 +73,6 @@ class I18nManager {
 		this.lang = await this.detectLanguage();
 		await this.loadTranslation(this.lang, this.dict);
 
-		if (this.lang !== this.fallbackLang) {
-			await this.loadTranslation(this.fallbackLang, this.fallbackDict);
-		}
-
 		this.initialized = true;
 	}
 
@@ -95,10 +91,11 @@ class I18nManager {
 			const agentDir = path.join(os.homedir(), ".omp", "agent");
 			const configPath = path.join(agentDir, "config.yml");
 			const content = await fs.readFile(configPath, "utf-8");
-			// 匹配两种 YAML 格式：i18n.language: zh 或 i18n:\n  language: zh
+			// 匹配两种 YAML 格式：i18n:\n  language: zh（嵌套，settings 系统写入）
+			// 或 i18n.language: zh（扁平，旧格式）。优先匹配嵌套格式。
 			const match =
-				content.match(/^\s*i18n\.language:\s*["']?([^"'\s\n#]+)["']?/m) ||
-				content.match(/^\s*i18n:\s*\n\s*language:\s*["']?([^"'\s\n]+)["']?/m);
+				content.match(/^\s*i18n:\s*\n\s*language:\s*["']?([^"'\s\n#]+)["']?/m) ||
+				content.match(/^\s*i18n\.language:\s*["']?([^"'\s\n#]+)["']?/m);
 			if (match) {
 				const value = match[1].trim();
 				if (value === "zh" || value === "en") {
@@ -181,17 +178,6 @@ class I18nManager {
 			return params ? this.interpolate(value, params) : value;
 		}
 
-		// 尝试 fallback 语言 - 先扁平后嵌套
-		let fallbackValue = this.fallbackDict[key];
-		if (fallbackValue !== undefined && typeof fallbackValue === "string") {
-			return params ? this.interpolate(fallbackValue, params) : fallbackValue;
-		}
-
-		fallbackValue = this.getNestedValue(this.fallbackDict, key);
-		if (fallbackValue !== undefined && typeof fallbackValue === "string") {
-			return params ? this.interpolate(fallbackValue, params) : fallbackValue;
-		}
-
 		// 返回用户提供的 fallback 或 key 本身
 		const result = fallback || key;
 		return params ? this.interpolate(result, params) : result;
@@ -237,7 +223,12 @@ class I18nManager {
 		this.lang = lang;
 		this.dict = {};
 		this.initialized = false;
-		await this.init();
+		await this.loadTranslation(lang, this.dict);
+		this.initialized = true;
+
+		// Clear all caches so UI reflects new language
+		(await import("../modes/components/settings-defs")).invalidateSettingDefsCache();
+		(await import("./prompt-loader")).clearPromptCache();
 	}
 
 	/**
