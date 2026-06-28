@@ -63,6 +63,38 @@ function extractSettingsTranslations(): TranslationData {
 	return translations;
 }
 
+function extractCommandClassDesc(content: string, commandName: string): Record<string, string> {
+	const result: Record<string, string> = {};
+	// Match static description on the command class
+	const descRe = /static\s+description\s*=\s*"([^"]+)"/s;
+	const descMatch = content.match(descRe);
+	if (descMatch) {
+		result[`commands.${commandName}.description`] = descMatch[1];
+	}
+	return result;
+}
+
+function extractArgsAndFlagsFlat(content: string): Record<string, string> {
+	const result: Record<string, string> = {};
+
+	// Extract arg descriptions: name: Args.string({ description: "..." })
+	// Support multiline by matching the full Args call
+	const argRe = /(\w+):\s*Args\.\w+\(\{[^}]*?description:\s*"([^"]+)"/gs;
+	for (const match of extractMatches(argRe, content)) {
+		const key = `args.${match[1]}.description`;
+		if (!result[key]) result[key] = match[2];
+	}
+
+	// Extract flag descriptions: name: Flags.string({ description: "..." })
+	const flagRe = /(\w+):\s*Flags\.\w+\(\{[^}]*?description:\s*"([^"]+)"/gs;
+	for (const match of extractMatches(flagRe, content)) {
+		const key = `flags.${match[1]}.description`;
+		if (!result[key]) result[key] = match[2];
+	}
+
+	return result;
+}
+
 function extractCommandsTranslations(): TranslationData {
 	const commandsDir = path.join(process.cwd(), "packages/coding-agent/src/commands");
 	const translations: TranslationData = {};
@@ -72,26 +104,11 @@ function extractCommandsTranslations(): TranslationData {
 		const content = fs.readFileSync(path.join(commandsDir, file), "utf-8");
 		const commandName = file.replace(".ts", "");
 
-		const descMatch = content.match(/description:\s*"([^"]+)"/);
-		if (descMatch) {
-			translations[`commands.${commandName}.description`] = descMatch[1];
-		}
+		// Command class description
+		Object.assign(translations, extractCommandClassDesc(content, commandName));
 
-		const flagsRegex = /flags:\s*\{([^}]+)\}/gs;
-		for (const flagsMatch of extractMatches(flagsRegex, content)) {
-			const flagRegex = /(\w+):\s*Flags\.\w+\(\{[^}]*description:\s*"([^"]+)"/gs;
-			for (const flagMatch of extractMatches(flagRegex, flagsMatch[1])) {
-				translations[`commands.${commandName}.flags.${flagMatch[1]}.description`] = flagMatch[2];
-			}
-		}
-
-		const argsRegex = /args:\s*\{([^}]+)\}/gs;
-		for (const argsMatch of extractMatches(argsRegex, content)) {
-			const argRegex = /(\w+):\s*Args\.\w+\(\{[^}]*description:\s*"([^"]+)"/gs;
-			for (const argMatch of extractMatches(argRegex, argsMatch[1])) {
-				translations[`commands.${commandName}.args.${argMatch[1]}.description`] = argMatch[2];
-			}
-		}
+		// Flat args/flags descriptions (shared across all commands)
+		Object.assign(translations, extractArgsAndFlagsFlat(content));
 	}
 
 	return translations;
