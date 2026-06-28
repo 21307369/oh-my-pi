@@ -132,8 +132,8 @@ describe("settings i18n integration", () => {
 
 	test("getAllSettingDefs translates labels and descriptions", async () => {
 		const translations = {
-			"theme.dark.label": "深色主题",
-			"theme.dark.description": "深色模式下使用的主题",
+			"settings.theme.dark.label": "深色主题",
+			"settings.theme.dark.description": "深色模式下使用的主题",
 		};
 		await fs.promises.writeFile(path.join(tempDir, "zh-settings.json"), JSON.stringify(translations));
 

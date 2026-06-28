@@ -46,7 +46,8 @@ import { AUTO_THINKING, type ConfiguredThinkingLevel } from "../../thinking";
 import { getTabBarTheme } from "../shared";
 import { bottomBorder, divider, row, topBorder } from "./overlay-box";
 import { handleInputOrEscape, PluginSettingsComponent } from "./plugin-settings";
-import { getSettingDef, getSettingsForTab, type SettingDef } from "./settings-defs";
+import { i18n } from "../../i18n";
+import { getSettingDef, getSettingsForTab, getGroupLabel, getTabLabel, type SettingDef } from "./settings-defs";
 import { SnapcompactShapePreview } from "./snapcompact-shape-preview";
 import { getPreset } from "./status-line/presets";
 
@@ -348,11 +349,10 @@ function settingsSidebarWidth(): number {
 function getSettingsTabs(): Tab[] {
 	return [
 		...SETTING_TABS.map(id => {
-			const meta = TAB_METADATA[id];
-			const icon = theme.symbol(meta.icon as Parameters<typeof theme.symbol>[0]);
-			return { id, label: `${icon} ${meta.label}`, short: icon };
+			const icon = theme.symbol(TAB_METADATA[id].icon as Parameters<typeof theme.symbol>[0]);
+			return { id, label: `${icon} ${getTabLabel(id)}`, short: icon };
 		}),
-		{ id: "plugins", label: `${theme.icon.package} Plugins`, short: theme.icon.package },
+		{ id: "plugins", label: `${theme.icon.package} ${i18n.t("tabs.plugins.label", "Plugins")}`, short: theme.icon.package },
 	];
 }
 
@@ -538,7 +538,7 @@ export class SettingsSelectorComponent implements Component {
 		}
 
 		const out: string[] = [];
-		out.push(topBorder(width, "Settings"));
+		out.push(topBorder(width, i18n.t("ui.settings.title", "Settings")));
 		this.#tabRowStart = out.length;
 		this.#tabRowCount = tabLines.length;
 		for (const line of tabLines) {
@@ -644,7 +644,7 @@ export class SettingsSelectorComponent implements Component {
 			{
 				layout: "flat",
 				typeToSearch: false,
-				emptyText: "No matching settings",
+				emptyText: i18n.t("ui.settings.noResults", "No matching settings"),
 				hint: "",
 			},
 		);
@@ -698,7 +698,7 @@ export class SettingsSelectorComponent implements Component {
 			const meta = TAB_METADATA[result.tab];
 			items.push({
 				id: `__tab:${result.tab}`,
-				label: `${theme.symbol(meta.icon as Parameters<typeof theme.symbol>[0])} ${meta.label}`,
+				label: `${theme.symbol(meta.icon as Parameters<typeof theme.symbol>[0])} ${getTabLabel(result.tab)}`,
 				currentValue: "",
 				heading: true,
 			});
@@ -748,17 +748,17 @@ export class SettingsSelectorComponent implements Component {
 			const icon = theme.symbol(meta.icon as Parameters<typeof theme.symbol>[0]);
 			const count = counts.get(id) ?? 0;
 			if (count > 0) {
-				matched.push({ id, label: `${icon} ${meta.label} (${count})`, short: `${icon} ${count}` });
+				matched.push({ id, label: `${icon} ${getTabLabel(id)} (${count})`, short: `${icon} ${count}` });
 			}
 		}
 		for (const id of SETTING_TABS) {
 			if (matchedIds.has(id)) continue;
 			const meta = TAB_METADATA[id];
 			const icon = theme.symbol(meta.icon as Parameters<typeof theme.symbol>[0]);
-			empty.push({ id, label: `${icon} ${meta.label}`, short: icon, muted: true });
+			empty.push({ id, label: `${icon} ${getTabLabel(id)}`, short: icon, muted: true });
 		}
 		// Plugins hosts its own UI; it is not part of the schema-backed search.
-		empty.push({ id: "plugins", label: `${theme.icon.package} Plugins`, short: theme.icon.package, muted: true });
+		empty.push({ id: "plugins", label: `${theme.icon.package} ${i18n.t("tabs.plugins.label", "Plugins")}`, short: theme.icon.package, muted: true });
 		return [...matched, ...empty];
 	}
 
@@ -1072,7 +1072,7 @@ export class SettingsSelectorComponent implements Component {
 	#showSettingsTab(tabId: SettingTab): void {
 		const defs = getSettingsForTab(tabId);
 
-		const items = this.#buildItemsForDefs(defs);
+		const items = this.#buildItemsForDefs(defs, tabId);
 		// Mirror SettingsList's section detection (leading ungrouped items form
 		// an implicit section) so the footer hint only advertises PgUp/PgDn
 		// when the jump actually changes sections.
@@ -1120,14 +1120,15 @@ export class SettingsSelectorComponent implements Component {
 	 * Inserts a heading row whenever the (group-sorted) definition list crosses
 	 * into a new group; groups whose items are all condition-hidden emit none.
 	 */
-	#buildItemsForDefs(defs: SettingDef[]): SettingItem[] {
+	#buildItemsForDefs(defs: SettingDef[], tabId: SettingTab): SettingItem[] {
 		const items: SettingItem[] = [];
 		let lastGroup: string | undefined;
 		for (const def of defs) {
 			const item = this.#defToItem(def);
 			if (!item) continue;
 			if (def.group && def.group !== lastGroup) {
-				items.push({ id: `__heading:${def.group}`, label: def.group, currentValue: "", heading: true });
+				const translated = getGroupLabel(tabId, def.group);
+				items.push({ id: `__heading:${def.group}`, label: translated, currentValue: "", heading: true });
 				lastGroup = def.group;
 			}
 			items.push(item);
@@ -1138,7 +1139,7 @@ export class SettingsSelectorComponent implements Component {
 	/** Re-evaluate condition gates against the current settings and refresh the active list. */
 	#refreshCurrentTabItems(defs: SettingDef[]): void {
 		if (this.#currentTabId === "plugins" || !this.#currentList) return;
-		this.#currentList.setItems(this.#buildItemsForDefs(defs));
+		this.#currentList.setItems(this.#buildItemsForDefs(defs, this.#currentTabId));
 	}
 
 	/**
