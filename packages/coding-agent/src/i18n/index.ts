@@ -70,7 +70,7 @@ class I18nManager {
 	async init(): Promise<void> {
 		if (this.initialized) return;
 
-		this.lang = this.detectLanguage();
+		this.lang = await this.detectLanguage();
 		await this.loadTranslation(this.lang, this.dict);
 
 		if (this.lang !== this.fallbackLang) {
@@ -82,11 +82,34 @@ class I18nManager {
 
 	/**
 	 * 检测语言设置
+	 * 优先读取 OMP_LANG 环境变量，其次从 config.yml 读取 i18n.language
 	 */
-	private detectLanguage(): string {
-		// 从 Settings 读取 i18n.language
-		// 目前简化为从环境变量读取，后续集成 Settings
-		return process.env.OMP_LANG || "en";
+	private async detectLanguage(): Promise<string> {
+		// 环境变量优先
+		if (process.env.OMP_LANG) {
+			return process.env.OMP_LANG;
+		}
+
+		// 从 config.yml 读取
+		try {
+			const agentDir = path.join(os.homedir(), ".omp", "agent");
+			const configPath = path.join(agentDir, "config.yml");
+			const content = await fs.readFile(configPath, "utf-8");
+			// 匹配两种 YAML 格式：i18n.language: zh 或 i18n:\n  language: zh
+			const match =
+				content.match(/^\s*i18n\.language:\s*["']?([^"'\s\n#]+)["']?/m) ||
+				content.match(/^\s*i18n:\s*\n\s*language:\s*["']?([^"'\s\n]+)["']?/m);
+			if (match) {
+				const value = match[1].trim();
+				if (value === "zh" || value === "en") {
+					return value;
+				}
+			}
+		} catch {
+			// config.yml 不存在或读取失败，静默回退到 en
+		}
+
+		return "en";
 	}
 
 	/**

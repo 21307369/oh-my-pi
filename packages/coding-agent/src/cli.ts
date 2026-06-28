@@ -257,6 +257,8 @@ export async function runCli(argv: string[]): Promise<void> {
 
 		// Initialize i18n system after profile is set
 		await i18n.init();
+		// Invalidate settings cache so labels are re-generated with translations
+		(await import("./modes/components/settings-defs")).invalidateSettingDefsCache();
 
 		if (extracted.aliasName !== undefined) {
 			const profile = extracted.profile ?? getActiveProfile();
