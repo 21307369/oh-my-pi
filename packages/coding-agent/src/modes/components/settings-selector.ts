@@ -41,6 +41,7 @@ import type {
 	StatusLineSeparatorStyle,
 } from "../../config/settings-schema";
 import { SETTING_TABS, TAB_METADATA } from "../../config/settings-schema";
+import { i18n } from "../../i18n";
 import {
 	interceptGroupLabel,
 	interceptPluginsLabel,
@@ -55,7 +56,6 @@ import { handleInputOrEscape, PluginSettingsComponent } from "./plugin-settings"
 import { getSettingDef, getSettingsForTab, type SettingDef, type SubmenuSettingDef } from "./settings-defs";
 import { SnapcompactShapePreview } from "./snapcompact-shape-preview";
 import { getPreset } from "./status-line/presets";
-import { i18n } from "../../i18n";
 
 /**
  * A submenu component for selecting from a list of options.

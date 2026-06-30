@@ -42,8 +42,6 @@ export interface TranslationFile {
 class I18nManager {
 	private dict: TranslationFile = {};
 	private lang: string = "en";
-	private readonly fallbackLang: string = "en";
-	private fallbackDict: TranslationFile = {};
 	private lanDir: string;
 	private initialized = false;
 
@@ -56,7 +54,6 @@ class I18nManager {
 	 */
 	reset(lanDir?: string): void {
 		this.dict = {};
-		this.fallbackDict = {};
 		this.lang = "en";
 		this.initialized = false;
 		if (lanDir) {

@@ -8,9 +8,9 @@ import {
 	wrapTextWithAnsi,
 } from "@oh-my-pi/pi-tui";
 import { APP_NAME } from "@oh-my-pi/pi-utils";
+import { interceptTips, interceptWelcomeString } from "../../i18n/interceptor";
 import { theme } from "../../modes/theme/theme";
 import tipsText from "./tips.txt" with { type: "text" };
-import { interceptTips, interceptWelcomeString } from "../../i18n/interceptor";
 
 /** Tips embedded at build time, one per line; blanks dropped. */
 const EN_TIPS: readonly string[] = tipsText

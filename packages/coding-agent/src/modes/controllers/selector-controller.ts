@@ -24,6 +24,7 @@ import {
 	getPluginsCacheDir,
 	MarketplaceManager,
 } from "../../extensibility/plugins/marketplace";
+import { i18n } from "../../i18n";
 import {
 	getAvailableThemes,
 	getSymbolTheme,
@@ -76,10 +77,9 @@ import { ToolExecutionComponent } from "../components/tool-execution";
 import { TranscriptBlock } from "../components/transcript-container";
 import { TreeSelectorComponent } from "../components/tree-selector";
 import { UserMessageSelectorComponent } from "../components/user-message-selector";
+import { invalidateTipsCache } from "../components/welcome";
 import type { SessionObserverRegistry } from "../session-observer-registry";
 import { buildCopyTargets } from "../utils/copy-targets";
-import { i18n } from "../../i18n";
-import { invalidateTipsCache } from "../components/welcome";
 
 const MANUAL_LOGIN_TIP = "Tip: You can complete pairing with /login <redirect URL>.";
 

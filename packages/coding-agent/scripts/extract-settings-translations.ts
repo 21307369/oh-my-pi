@@ -7,8 +7,8 @@
  */
 
 import * as fs from "node:fs";
-import * as path from "node:path";
 import * as os from "node:os";
+import * as path from "node:path";
 
 const SCHEMA_PATH = path.join(import.meta.dir, "../src/config/settings-schema.ts");
 const LAN_DIR = path.join(os.homedir(), ".omp", "lan");
@@ -42,7 +42,7 @@ function extractUiBlocks(): UiBlock[] {
 		// 向上查找最近的设置定义（在 ui: 之前，缩进更少的行）
 		// 设置定义格式: `keyName: {` 或 `"key.name": {`
 		let settingPath = "";
-		let uiIndent = getIndent(lines[uiLineIdx]);
+		const uiIndent = getIndent(lines[uiLineIdx]);
 
 		for (let j = uiLineIdx - 1; j >= 0; j--) {
 			const line = lines[j];
@@ -144,14 +144,16 @@ function parseUiBlock(settingPath: string, content: string): UiBlock | null {
 	const optionsSection = content.match(/options:\s*\[([\s\S]*?)\]/);
 	if (optionsSection) {
 		const optionsContent = optionsSection[1];
-		const optionRegex = /\{\s*value:\s*"([^"]+)"[\s\S]*?label:\s*"([^"]+)"(?:[\s\S]*?description:\s*"([^"]*)")?[\s\S]*?\}/g;
-		let match;
-		while ((match = optionRegex.exec(optionsContent)) !== null) {
+		const optionRegex =
+			/\{\s*value:\s*"([^"]+)"[\s\S]*?label:\s*"([^"]+)"(?:[\s\S]*?description:\s*"([^"]*)")?[\s\S]*?\}/g;
+		let match = optionRegex.exec(optionsContent);
+		while (match !== null) {
 			options.push({
 				value: match[1],
 				label: match[2],
 				description: match[3],
 			});
+			match = optionRegex.exec(optionsContent);
 		}
 	}
 
@@ -265,8 +267,8 @@ function generateTranslations() {
 		const enPath = path.join(LAN_DIR, `en-settings-${tab}.json`);
 		const zhPath = path.join(LAN_DIR, `zh-settings-${tab}.json`);
 
-		fs.writeFileSync(enPath, JSON.stringify(enData, null, 2) + "\n");
-		fs.writeFileSync(zhPath, JSON.stringify(zhData, null, 2) + "\n");
+		fs.writeFileSync(enPath, `${JSON.stringify(enData, null, 2)}\n`);
+		fs.writeFileSync(zhPath, `${JSON.stringify(zhData, null, 2)}\n`);
 
 		const totalKeys = Object.keys(enData).length;
 		const emptyZh = Object.values(zhData).filter(v => v === "").length;
