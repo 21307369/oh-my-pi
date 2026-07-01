@@ -1,14 +1,19 @@
 /**
  * Markdown Prompt 翻译加载器
  *
- * 在运行时检查 ~/.omp/lan/prompts/{lang}/ 目录
- * 如果存在对应的翻译文件，使用翻译版本
- * 否则使用原始的英文版本
+ * 加载策略：
+ * 1. 优先从包内 bundled lang/prompts/ 目录加载（随代码分发）
+ * 2. 再从 ~/.omp/lan/prompts/ 加载用户覆盖（可选）
+ * 找不到翻译则使用原始英文版本
  */
 
 import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+/** 包内 bundled prompt 翻译目录 */
+const BUNDLED_PROMPTS_DIR = join(fileURLToPath(import.meta.url), "..", "lang", "prompts");
 
 /**
  * Prompt 翻译缓存
@@ -38,13 +43,12 @@ export function loadTranslatedPrompt(promptPath: string, originalContent: string
 	}
 
 	// 检查缓存
-	const cacheKey = `${lang}:${promptPath}`;
-	if (promptCache.has(cacheKey)) {
-		return promptCache.get(cacheKey)!;
-	}
+	// 构造翻译文件路径（用户覆盖优先，bundled 兜底）
+	const userPath = join(homedir(), ".omp", "lan", "prompts", lang, `${promptPath}.md`);
+	const bundledPath = join(BUNDLED_PROMPTS_DIR, lang, `${promptPath}.md`);
 
-	// 构造翻译文件路径
-	const translatedPath = join(homedir(), ".omp", "lan", "prompts", lang, `${promptPath}.md`);
+	// 用户覆盖优先
+	const translatedPath = existsSync(userPath) ? userPath : bundledPath;
 
 	// 检查翻译文件是否存在
 	if (existsSync(translatedPath)) {

@@ -1,7 +1,9 @@
 /**
  * 国际化 (i18n) 核心模块
  *
- * 提供翻译功能，从 ~/.omp/lan/{lang}-*.json 加载翻译文件
+ * 翻译文件加载策略：
+ * 1. 优先从包内 bundled lang/ 目录加载（随代码分发）
+ * 2. 再从 ~/.omp/lan/ 加载用户覆盖（可选）
  * 支持插值和 fallback 机制
  */
 
@@ -10,6 +12,9 @@ import * as os from "node:os";
 import * as path from "node:path";
 
 import { isEnoent, logger } from "@oh-my-pi/pi-utils";
+
+/** 包内 bundled 翻译目录 */
+const BUNDLED_LAN_DIR = path.join(import.meta.dir, "lang");
 
 /**
  * 翻译字典类型
@@ -43,9 +48,11 @@ class I18nManager {
 	private dict: TranslationFile = {};
 	private lang: string = "en";
 	private lanDir: string;
+	private useBundled: boolean;
 	private initialized = false;
 
 	constructor(lanDir?: string) {
+		this.useBundled = lanDir === undefined;
 		this.lanDir = lanDir ?? path.join(os.homedir(), ".omp", "lan");
 	}
 
@@ -58,6 +65,7 @@ class I18nManager {
 		this.initialized = false;
 		if (lanDir) {
 			this.lanDir = lanDir;
+			this.useBundled = false;
 		}
 	}
 
@@ -108,15 +116,28 @@ class I18nManager {
 
 	/**
 	 * 加载翻译文件
+	 * 先加载包内 bundled 翻译，再用用户目录覆盖
 	 */
 	private async loadTranslation(lang: string, target: TranslationFile): Promise<void> {
+		// 1. 加载包内 bundled 翻译（仅默认路径时）
+		if (this.useBundled) {
+			await this.loadTranslationFromDir(lang, BUNDLED_LAN_DIR, target);
+		}
+		// 2. 加载用户目录翻译
+		await this.loadTranslationFromDir(lang, this.lanDir, target);
+	}
+
+	/**
+	 * 从指定目录加载翻译文件
+	 */
+	private async loadTranslationFromDir(lang: string, dir: string, target: TranslationFile): Promise<void> {
 		try {
-			const files = await fs.readdir(this.lanDir);
+			const files = await fs.readdir(dir);
 			const langFiles = files.filter(f => f.startsWith(`${lang}-`) && f.endsWith(".json"));
 
 			for (const file of langFiles) {
 				try {
-					const filePath = path.join(this.lanDir, file);
+					const filePath = path.join(dir, file);
 					const content = await fs.readFile(filePath, "utf-8");
 					const parsed = JSON.parse(content) as TranslationFile;
 					this.mergeTranslations(target, parsed);
@@ -127,7 +148,7 @@ class I18nManager {
 		} catch (error) {
 			// 目录不存在时静默失败
 			if (!isEnoent(error)) {
-				logger.warn(`Failed to read translation directory: ${this.lanDir}`, { error });
+				logger.warn(`Failed to read translation directory: ${dir}`, { error });
 			}
 		}
 	}

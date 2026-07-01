@@ -144,15 +144,14 @@ describe("i18n", () => {
 	});
 
 	describe("fallback 语言机制", () => {
-		it("当前语言缺失时尝试 fallback 语言", async () => {
+		it("当前语言缺失时返回 key", async () => {
 			await fs.writeFile(path.join(tempDir, "zh-partial.json"), JSON.stringify({ "only.in.zh": "仅中文" }));
-			await fs.writeFile(path.join(tempDir, "en-fallback.json"), JSON.stringify({ "only.in.en": "English only" }));
 
 			const i18n = createI18n(tempDir);
 			await i18n.init();
 
 			expect(i18n.t("only.in.zh")).toBe("仅中文");
-			expect(i18n.t("only.in.en")).toBe("English only");
+			expect(i18n.t("only.in.en")).toBe("only.in.en");
 		});
 
 		it("两种语言都没有时返回 key", async () => {

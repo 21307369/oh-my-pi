@@ -38,7 +38,7 @@ describe("settings i18n integration", () => {
 		expect(ui?.tab).toBe("interaction");
 		expect(ui?.group).toBe("General");
 		expect(ui?.label).toBe("Language");
-		expect(ui?.description).toBe("UI language (requires restart)");
+		expect(ui?.description).toBe("UI language (applies on next screen refresh)");
 	});
 
 	test("TAB_METADATA has all required tabs", async () => {
