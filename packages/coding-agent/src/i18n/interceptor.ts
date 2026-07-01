@@ -108,7 +108,7 @@ export function interceptWelcomeString(key: string): string {
 		"welcome.nerdfont": "Please use nerdfont 😭.",
 	};
 	const english = englishMap[key] ?? key;
-	return i18n.t(`welcome.${key}`, english);
+	return i18n.t(key, english);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

@@ -11,7 +11,7 @@ import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 
-import { isEnoent, logger } from "@oh-my-pi/pi-utils";
+import { getAgentDir, isEnoent, logger } from "@oh-my-pi/pi-utils";
 
 /** 包内 bundled 翻译目录 */
 const BUNDLED_LAN_DIR = path.join(import.meta.dir, "lang");
@@ -93,7 +93,7 @@ class I18nManager {
 
 		// 从 config.yml 读取
 		try {
-			const agentDir = path.join(os.homedir(), ".omp", "agent");
+			const agentDir = getAgentDir();
 			const configPath = path.join(agentDir, "config.yml");
 			const content = await fs.readFile(configPath, "utf-8");
 			// 匹配两种 YAML 格式：i18n:\n  language: zh（嵌套，settings 系统写入）
