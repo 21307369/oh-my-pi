@@ -1,0 +1,45 @@
+# Auto-rebase feat/i18n-stats-pagination onto upstream main
+# Lives in fork (21307369/oh-my-pi), checks upstream hourly
+name: Auto-Rebase
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/i18n-stats-pagination
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch upstream
+        run: git remote add upstream https://github.com/can1357/oh-my-pi.git && git fetch upstream
+
+      - name: Rebase onto upstream/main
+        id: rebase
+        run: |
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+            echo "Already up to date, skipping."
+            exit 0
+          fi
+          echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+          git rebase upstream/main
+
+      - name: Push to fork
+        if: steps.rebase.outputs.up_to_date == 'false'
+        run: git push origin feat/i18n-stats-pagination --force-with-lease
